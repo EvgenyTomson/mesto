@@ -15,15 +15,9 @@
   }
 }
 
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 600px) {
   .elements__cards {
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(6, 1fr);
   }
 }
-
-/* @media screen and (max-width: 390px) {
-  .elements__cards {
-    justify-items: center;
-  }
-} */

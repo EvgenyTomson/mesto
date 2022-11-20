@@ -5,11 +5,16 @@
   font-size: 24px;
   line-height: 29px;
   color: #000;
-
-  flex-basis: 75%;
+  max-width: 200px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+@media screen and (max-width: 600px) {
+  .elements__title {
+    max-width: 280px;
+  }
 }
 
 @media screen and (max-width: 398px) {

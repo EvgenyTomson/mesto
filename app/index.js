@@ -1,12 +1,11 @@
 'use strict';
 
-const form = document.querySelector('.popup__container');
 const profileEdit = document.querySelector('.profile__edit');
-const popup = document.querySelector('.popup');
-
 const profileName = document.querySelector('.profile__name');
 const profileJob = document.querySelector('.profile__about');
 
+const popup = document.querySelector('.popup');
+const popupForm = document.querySelector('.popup__container');
 const inputName = document.querySelector('#inputName');
 const inputJob = document.querySelector('#inputJob');
 
@@ -21,12 +20,15 @@ profileEdit.addEventListener('click', () => {
 
 // Закрываем форму редактирования профиля без сохранения:
 const closeBtn = document.querySelector('.popup__close');
-closeBtn.addEventListener('click', () => {
+closeBtn.addEventListener('click', event => {
+  // отключаем действие по умолчанию. если этого не сделать, происходит submit на форме:
+  event.preventDefault();
+
   popup.classList.remove('popup_opened');
 });
 
 // Сохраняем изменения профиля и закрываем форму:
-form.addEventListener('submit', event => {
+popupForm.addEventListener('submit', event => {
   // отключаем перезагрузку страницы при отправке формы (действие по умолчанию):
   event.preventDefault();
 

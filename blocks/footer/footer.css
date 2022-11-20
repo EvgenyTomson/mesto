@@ -5,7 +5,7 @@
   text-align: left;
 }
 
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 600px) {
   .footer {
     padding: 48px 0 36px;
   }
