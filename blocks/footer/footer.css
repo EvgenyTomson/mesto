@@ -1,5 +1,5 @@
 .footer {
-  padding: 66px 0 60px;
+  padding: 66px 19px 60px;
   max-width: 880px;
   margin: 0 auto;
   text-align: left;
@@ -7,6 +7,7 @@
 
 @media screen and (max-width: 600px) {
   .footer {
-    padding: 48px 0 36px;
+    padding-top: 48px;
+    padding-bottom: 36px;
   }
 }

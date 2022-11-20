@@ -1,8 +1,8 @@
-.add-place {
+.profile__add-place {
   flex-shrink: 0;
   width: 150px;
   height: 50px;
-  background-image: url(../../img/button_add.svg);
+  background-image: url(../../../img/button_add.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -14,13 +14,13 @@
   transition: .2s ease-in-out;
 }
 
-.add-place:hover {
+.profile__add-place:hover {
   opacity: .6;
 }
 
 @media screen and (max-width: 760px) {
-  .add-place {
-    background-image: url(../../img/button_add_big.svg);
+  .profile__add-place {
+    background-image: url(../../../img/button_add_big.svg);
     width: 282px;
     height: 50px;
   }
