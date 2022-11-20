@@ -1,4 +1,4 @@
-.elements__card {
+.card {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -6,7 +6,7 @@
 }
 
 @media screen and (max-width: 936px) {
-  .elements__card {
+  .card {
     max-width: 100%;
   }
 }

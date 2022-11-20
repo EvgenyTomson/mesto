@@ -1,4 +1,4 @@
-.elements__title {
+.card__title {
   margin: 0;
   font-style: normal;
   font-weight: 900;
@@ -12,13 +12,13 @@
 }
 
 @media screen and (max-width: 600px) {
-  .elements__title {
+  .card__title {
     max-width: 280px;
   }
 }
 
 @media screen and (max-width: 398px) {
-  .elements__title {
+  .card__title {
     max-width: 200px;
   }
 }

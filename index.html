@@ -32,46 +32,46 @@
     <!-- Elements -->
     <section class="elements">
       <ul class="elements__cards">
-        <li class="elements__card">
-          <img src="./img/places/place-1.jpg" alt=" Карачаевск." class="elements__image">
-          <div class="elements__description">
-            <h2 class="elements__title">Карачаевск</h2>
-            <button class="elements__like" type="button" aria-label="Поставить лайк"></button>
+        <li class="card">
+          <img src="./img/places/place-1.jpg" alt=" Карачаевск." class="card__image">
+          <div class="card__description">
+            <h2 class="card__title">Карачаевск</h2>
+            <button class="card__like" type="button" aria-label="Поставить лайк"></button>
           </div>
         </li>
-        <li class="elements__card">
-          <img src="./img/places/place-2.jpg" alt=" Гора Эльбрус." class="elements__image">
-          <div class="elements__description">
-            <h2 class="elements__title">Гора Эльбрус</h2>
-            <button class="elements__like" type="button" aria-label="Поставить лайк"></button>
+        <li class="card">
+          <img src="./img/places/place-2.jpg" alt=" Гора Эльбрус." class="card__image">
+          <div class="card__description">
+            <h2 class="card__title">Гора Эльбрус</h2>
+            <button class="card__like" type="button" aria-label="Поставить лайк"></button>
           </div>
         </li>
-        <li class="elements__card">
-          <img src="./img/places/place-3.jpg" alt=" Домбай." class="elements__image">
-          <div class="elements__description">
-            <h2 class="elements__title">Домбай</h2>
-            <button class="elements__like" type="button" aria-label="Поставить лайк"></button>
+        <li class="card">
+          <img src="./img/places/place-3.jpg" alt=" Домбай." class="card__image">
+          <div class="card__description">
+            <h2 class="card__title">Домбай</h2>
+            <button class="card__like" type="button" aria-label="Поставить лайк"></button>
           </div>
         </li>
-        <li class="elements__card">
-          <img src="./img/places/place-1.jpg" alt=" Карачаево-Черкессия." class="elements__image">
-          <div class="elements__description">
-            <h2 class="elements__title">Карачаево-Черкессия</h2>
-            <button class="elements__like" type="button" aria-label="Поставить лайк"></button>
+        <li class="card">
+          <img src="./img/places/place-1.jpg" alt=" Карачаево-Черкессия." class="card__image">
+          <div class="card__description">
+            <h2 class="card__title">Карачаево-Черкессия</h2>
+            <button class="card__like" type="button" aria-label="Поставить лайк"></button>
           </div>
         </li>
-        <li class="elements__card">
-          <img src="./img/places/place-2.jpg" alt=" Гора Эльбрус." class="elements__image">
-          <div class="elements__description">
-            <h2 class="elements__title">Гора Эльбрус</h2>
-            <button class="elements__like" type="button" aria-label="Поставить лайк"></button>
+        <li class="card">
+          <img src="./img/places/place-2.jpg" alt=" Гора Эльбрус." class="card__image">
+          <div class="card__description">
+            <h2 class="card__title">Гора Эльбрус</h2>
+            <button class="card__like" type="button" aria-label="Поставить лайк"></button>
           </div>
         </li>
-        <li class="elements__card">
-          <img src="./img/places/place-3.jpg" alt=" Домбай." class="elements__image">
-          <div class="elements__description">
-            <h2 class="elements__title">Домбай</h2>
-            <button class="elements__like" type="button" aria-label="Поставить лайк"></button>
+        <li class="card">
+          <img src="./img/places/place-3.jpg" alt=" Домбай." class="card__image">
+          <div class="card__description">
+            <h2 class="card__title">Домбай</h2>
+            <button class="card__like" type="button" aria-label="Поставить лайк"></button>
           </div>
         </li>
       </ul>
@@ -84,13 +84,16 @@
 
   <!-- Popup -->
   <div class="popup">
-    <form action="#" class="popup__container">
-      <button class="popup__close" type="button" aria-label="Закрыть окно редактирования"></button>
-      <h2 class="popup__title">Редактировать профиль</h2>
-      <input type="text" class="popup__input" id="inputName" autocomplete="off">
-      <input type="text" class="popup__input" id="inputJob" autocomplete="off">
-      <input type="submit" class="popup__submit" value="Сохранить">
-    </form>
+    <div class="popup__container">
+      <form action="#" class="popup__form" name="profile">
+        <button class="popup__close" type="button" aria-label="Закрыть окно редактирования"></button>
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <input type="text" class="popup__input" id="inputName" name="username" autocomplete="off">
+        <input type="text" class="popup__input" id="inputJob" name="userjob" autocomplete="off">
+        <!-- <input type="submit" class="popup__submit" value="Сохранить"> -->
+        <button class="popup__submit" type="submit">Сохранить</button>
+      </form>
+    </div>
   </div>
 
   <!-- Скрипты -->

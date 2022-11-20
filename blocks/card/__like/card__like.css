@@ -1,4 +1,4 @@
-.elements__like {
+.card__like {
   box-sizing: border-box;
   width: 22px;
   height: 19px;
@@ -14,7 +14,7 @@
   transition: .2s ease-in-out;
 }
 
-.elements__like:hover {
+.card__like:hover {
   opacity: .5;
 }
 
