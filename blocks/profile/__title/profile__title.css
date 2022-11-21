@@ -9,5 +9,6 @@
   .profile__title {
     justify-content: center;
     gap: 10px;
+    transform: translateX(14px);
   }
 }
