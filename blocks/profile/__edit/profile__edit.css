@@ -1,7 +1,5 @@
 .profile__edit {
-  /* position: absolute;
-  right: -38px;
-  top: 16px; */
+  display: inline-flex;
   flex-shrink: 0;
   width: 24px;
   height: 24px;
@@ -21,20 +19,9 @@
   opacity: .6;
 }
 
-/* @media screen and (max-width: 690px) {
-  .profile__edit {
-    width: 18px;
-    height: 18px;
-    right: -30px;
-    top: 10px;
-  }
-} */
-
 @media screen and (max-width: 490px) {
   .profile__edit {
     width: 18px;
     height: 18px;
-    /* right: -30px;
-    top: 10px; */
   }
 }

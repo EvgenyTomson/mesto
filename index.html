@@ -32,7 +32,8 @@
     <!-- Elements -->
     <section class="elements">
       <ul class="elements__cards">
-        <li class="card">
+        <!-- <li class="card">
+          <button class="card__delete" type="button" aria-label="Удалить карточку"></button>
           <img src="./img/places/place-1.jpg" alt=" Карачаевск." class="card__image">
           <div class="card__description">
             <h2 class="card__title">Карачаевск</h2>
@@ -73,7 +74,7 @@
             <h2 class="card__title">Домбай</h2>
             <button class="card__like" type="button" aria-label="Поставить лайк"></button>
           </div>
-        </li>
+        </li> -->
       </ul>
     </section>
   </main>
@@ -82,17 +83,40 @@
     <p class="footer__copyright">© 2022 Mesto Russia</p>
   </footer>
 
-  <!-- Popup -->
-  <div class="popup">
+  <!-- Popup Edit Profile-->
+  <div class="popup" id="profileEditPopup">
     <div class="popup__container">
       <form action="#" class="popup__form" name="profile">
         <button class="popup__close" type="button" aria-label="Закрыть окно редактирования"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
         <input type="text" class="popup__input" id="inputName" name="username" autocomplete="off">
         <input type="text" class="popup__input" id="inputJob" name="userjob" autocomplete="off">
-        <!-- <input type="submit" class="popup__submit" value="Сохранить"> -->
         <button class="popup__submit" type="submit">Сохранить</button>
       </form>
+    </div>
+  </div>
+
+  <!-- Popup Add New Place-->
+  <div class="popup" id="newPlacePopup">
+    <div class="popup__container">
+      <form action="#" class="popup__form" name="newplace">
+        <button class="popup__close" type="button" aria-label="Закрыть окно"></button>
+        <h2 class="popup__title">Новое место</h2>
+        <input type="text" class="popup__input" id="placeName" name="placename" autocomplete="off" placeholder="Название">
+        <input type="text" class="popup__input" id="placeLink" name="placelink" autocomplete="off" placeholder="Ссылка на картинку">
+        <button class="popup__submit" type="submit">Создать</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup View Place Image-->
+  <div class="popup popup_type_big" id="viewImagePopup">
+    <div class="popup__container popup__container_type_big">
+        <button class="popup__close" type="button" aria-label="Закрыть окно"></button>
+        <figure class="popup__figure">
+          <img src="#" alt="" class="popup__image">
+          <figcaption class="popup__caption"></figcaption>
+        </figure>
     </div>
   </div>
 

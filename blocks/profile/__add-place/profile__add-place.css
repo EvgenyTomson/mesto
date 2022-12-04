@@ -2,11 +2,17 @@
   flex-shrink: 0;
   width: 150px;
   height: 50px;
-  background-image: url(../../../img/button_add.svg);
+  /* background-image: url(../../../img/button_add.svg); */
+  background-image: url(../../../img/plus.svg);
+
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
-  border: 0;
+  /* background-size: contain; */
+  background-size: 22px 22px;
+  /* border: 0; */
+  border: 2px solid #fff;
+  border-radius: 2px;
+
   background-color: transparent;
   padding: 0;
   cursor: pointer;
@@ -20,7 +26,8 @@
 
 @media screen and (max-width: 760px) {
   .profile__add-place {
-    background-image: url(../../../img/button_add_big.svg);
+    /* background-image: url(../../../img/button_add_big.svg); */
+    background-size: 16px 16px;
     width: 282px;
     height: 50px;
   }

@@ -8,14 +8,16 @@
   list-style: none;
 }
 
-@media screen and (max-width: 936px) {
+/* @media screen and (max-width: 936px) { */
+@media screen and (max-width: 770px) {
   .elements__cards {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
   }
 }
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) { */
+@media screen and (max-width: 530px) {
   .elements__cards {
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(6, 1fr);
