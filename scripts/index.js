@@ -76,11 +76,9 @@ function createCard(placeData) {
   // При добавлении карточки сразу вешаем на ее кнопку удаления событие:
   const cardDeleteBtn = card.querySelector('.card__delete');
   cardDeleteBtn.addEventListener('click', () => deleteCard(card));
-
   // также добавляем функционал лайков:
   const like = card.querySelector('.card__like');
   like.addEventListener('click', likeCard);
-
   // и открытие попапа по клику на изображение:
   cardImg.addEventListener('click', () => showImage(name, link));
 
@@ -169,7 +167,6 @@ popupCloseButtons.forEach(button => {
 // Общий функционал:
 
 // Вставляем начальные карточки из массива:
-initialCards.forEach(card => {
-  // addPlace(card.name, card.link);
-  addPlace(card);
+initialCards.forEach(cardData => {
+  addPlace(cardData);
 });
