@@ -57,8 +57,8 @@
       <form action="#" class="popup__form" name="newplace">
         <button class="popup__close" type="button" aria-label="Закрыть окно"></button>
         <h2 class="popup__title">Новое место</h2>
-        <input type="text" class="popup__input" id="placeName" name="placename" autocomplete="off" placeholder="Название">
-        <input type="text" class="popup__input" id="placeLink" name="placelink" autocomplete="off" placeholder="Ссылка на картинку">
+        <input type="text" class="popup__input" id="placeName" name="placename" required autocomplete="off" placeholder="Название">
+        <input type="url" class="popup__input" id="placeLink" name="placelink" required autocomplete="off" placeholder="Ссылка на картинку">
         <button class="popup__submit" type="submit">Создать</button>
       </form>
     </div>
@@ -88,6 +88,7 @@
   </template>
 
   <!-- Скрипты -->
+  <script src="./scripts/cards.js"></script>
   <script src="./scripts/index.js"></script>
 </body>
 </html>
