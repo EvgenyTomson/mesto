@@ -11,7 +11,6 @@ const popupProfile = document.querySelector('#profileEditPopup');
 const profileForm = popupProfile.querySelector('.popup__form');
 const inputName = popupProfile.querySelector('#inputName');
 const inputJob = popupProfile.querySelector('#inputJob');
-const profileCloseBtn = popupProfile.querySelector('.popup__close');
 
 // Объявляем функцию открытия попапа (общую для всех 3-х):
 function openPopup(popup) {
@@ -40,10 +39,6 @@ profileEdit.addEventListener('click', () => {
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
 });
-
-// Закрываем форму редактирования профиля без сохранения:
-// стрелочная функция нужна, чтобы передать параметр (конкретный закрываемый попап) в функцию closePopup:
-profileCloseBtn.addEventListener('click', () => closePopup(popupProfile));
 
 // Сохраняем изменения профиля и закрываем форму:
 profileForm.addEventListener('submit', submitProfile);
@@ -77,10 +72,26 @@ const initialCards = [
   }
 ];
 
-// Получаем попап с изображением и добавляем обработчик на его кнопку закрытия:
+// Получаем шаблон карточки:
+const cardTemplate = document.querySelector('#cardTemplate').content.querySelector('.card');
+
+// Функция создания элемента карточки:
+function createCard(name, link) {
+  const card = cardTemplate.cloneNode(true);
+  const cardImg = card.querySelector('.card__image');
+  const cardTitle = card.querySelector('.card__title');
+  cardImg.src = link;
+  cardImg.setAttribute('alt', ` ${name}.`);
+  cardTitle.textContent = name;
+
+  cardsHolder.prepend(card);
+
+  // Возвращаем ссылку на карточку и ее изображение, чтобы не получать эти элементы в других функциях:
+  return [card, cardImg]
+}
+
+// Получаем попап с изображением:
 const imagePopup = document.querySelector('.popup_type_big');
-const imagePopupCloseBtn = imagePopup.querySelector('.popup__close');
-imagePopupCloseBtn.addEventListener('click', () => closePopup(imagePopup));
 
 // Функция удаления карточки:
 function deleteCard(card) {
@@ -95,7 +106,7 @@ function likeCard(event) {
 
 // Функция открытия попапа с картинкой по клику на картинке в карточке:
 function showImage(card) {
-  // получаем попап для показа картинки:
+  // получаем элемент картинки попапа:
   const popupImage = imagePopup.querySelector('.popup__image');
   // достаем ссылку на картинку для нужной карточки:
   const link = card.querySelector('.card__image').src;
@@ -112,75 +123,23 @@ function showImage(card) {
 // Получаем контейнер для карточек:
 const cardsHolder = document.querySelector('.elements__cards');
 
-// Функция добавления нового места:
+// Функция добавления нового места (карточки со всем её функционалом):
 function addPlace(name, link) {
-  // создаем DOM-элемент для будущей карточки:
-  const cardElem = document.createElement('li');
 
-  // добавляем карточке нужный css-класс:
-  cardElem.classList.add('card');
-
-  // добавляем в карточку кнопку удаления. эти статичны и данные не приходят от пользователя:
-  cardElem.innerHTML = `
-    <button class="card__delete" type="button" aria-label="Удалить карточку"></button>
-  `;
-
-  // создаем картинку карточки. данные могут приходить от пользователя:
-  const cardImg = document.createElement('img');
-  cardImg.src = link;
-  cardImg.setAttribute('alt', ` ${name}.`);
-  cardImg.classList.add('card__image');
-  cardElem.append(cardImg);
-
-  // создаем поле с описанием карточки:
-  const cardDescription = document.createElement('div');
-  cardDescription.classList.add('card__description');
-  // вставляем поле описания карточки в конец карточки:
-  cardElem.append(cardDescription);
-
-  // добавляем к описанию карточки кнопку лайка. эти статичны и данные не приходят от пользователя:
-  cardDescription.innerHTML = `
-    <button class="card__like" type="button" aria-label="Поставить лайк"></button>
-  `;
-
-  // создаем название карточки. данные могут приходить от пользователя:
-  const cardTitle = document.createElement('h2');
-  cardTitle.classList.add('card__title');
-  cardTitle.textContent = name;
-  // вставляем название карточки в начало блока описания, перед кнопкой лайка:
-  cardDescription.prepend(cardTitle);
-
-  // вставляем нашу новую карточку именно в начало списка карточек:
-  cardsHolder.prepend(cardElem);
+  // Создаем карточку и получаем в переменные cardElem и cardImage ссылки на созданную карточку и ее картинку:
+  const [cardElem, cardImage] = [...createCard(name, link)];
 
   // При добавлении карточки сразу вешаем на ее кнопку удаления событие:
   const cardDeleteBtn = cardElem.querySelector('.card__delete');
 
   cardDeleteBtn.addEventListener('click', () => deleteCard(cardElem));
-  // cardDeleteBtn.addEventListener('click', () => {
-  //   cardElem.remove();
-  // });
 
   // также добавляем функционал лайков:
   const like = cardElem.querySelector('.card__like');
   like.addEventListener('click', likeCard);
-  // like.addEventListener('click', () => {
-  //   like.classList.toggle('card__like_active');
-  // });
 
   // и открытие попапа по клику на изображение:
-  const cardImage = cardElem.querySelector('.card__image');
   cardImage.addEventListener('click', () => showImage(cardElem));
-  // cardImage.addEventListener('click', () => {
-  //   const popupImage = imagePopup.querySelector('.popup__image');
-  //   popupImage.src = link;
-  //   popupImage.setAttribute('alt', name);
-
-  //   const popupCaption = imagePopup.querySelector('.popup__caption');
-  //   popupCaption.textContent = name;
-
-  //   openPopup(imagePopup);
-  // });
 }
 
 // Вставляем начальные карточки из массива:
@@ -196,10 +155,6 @@ const newPlacePopup = document.querySelector('#newPlacePopup');
 const newPlaceForm = newPlacePopup.querySelector('.popup__form');
 const newPlaceName = newPlacePopup.querySelector('#placeName');
 const newPlaceLink = newPlacePopup.querySelector('#placeLink');
-const newPlaceCloseBtn = newPlacePopup.querySelector('.popup__close');
-
-// Добавляем слушатель на кнопку закрытия попапа с новым местом:
-newPlaceCloseBtn.addEventListener('click', () => closePopup(newPlacePopup));
 
 // Открываем попап для добавления нового места:
 addPlaceBtn.addEventListener('click', () => {
@@ -218,10 +173,10 @@ function submitNewPlace(event) {
   const placeLink = newPlaceLink.value;
 
   //защита от пустой строки:
-  if (!placeName || !placeLink) {
-    console.log('Не указали данные');
-    return;
-  }
+  // if (!placeName || !placeLink) {
+  //   console.log('Не указали данные');
+  //   return;
+  // }
 
   addPlace(placeName, placeLink);
 
@@ -229,4 +184,17 @@ function submitNewPlace(event) {
 }
 
 newPlaceForm.addEventListener('submit', submitNewPlace);
+
+// Получаем все кнопки закрытия попапов:
+const popupCloseButtons = document.querySelectorAll('.popup__close');
+
+// и вешаем на все конпки закрытия попапов обработчики:
+popupCloseButtons.forEach(button => {
+  button.addEventListener('click', event => {
+    // Определяем, в каком именно попапе произошло нажатие кнопки закрытия:
+    const popup = event.target.closest('.popup');
+    // и передаем нужный попап в функцию закрытия попапа:
+    closePopup(popup);
+  })
+})
 
