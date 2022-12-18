@@ -2,6 +2,9 @@
 // ------------------------------------------------------------------
 // Объявление всех глобальных переменных:
 
+// Получаем все попапы:
+const popups = document.querySelectorAll('.popup');
+
 // Получаем кнопку редактирования профиля:
 const profileEdit = document.querySelector('.profile__edit');
 // Получаем данные текущего профиля:
@@ -36,20 +39,42 @@ const newPlaceForm = newPlacePopup.querySelector('.popup__form');
 const newPlaceName = newPlacePopup.querySelector('#placeName');
 const newPlaceLink = newPlacePopup.querySelector('#placeLink');
 
-// Получаем все кнопки закрытия попапов:
-const popupCloseButtons = document.querySelectorAll('.popup__close');
+// Получаем все кнопки закрытия попапов (уже не нужно)):
+//const popupCloseButtons = document.querySelectorAll('.popup__close');
 
 // ------------------------------------------------------------------
 // Объявление всех глобальных функций:
 
+// Функция закрытия попапа по клику мимо формы:
+function handleClickPopupClose(event) {
+  // находим ближайшую родительскую форму элемента, по которому кликнули (если клик был вне формы, получим null):
+  const closestForm = event.target.closest('.popup__container');
+  // закрываем попап, если клик был все формы или на кнопке закрытия:
+  if(!closestForm || event.target.classList.contains('popup__close')) {
+    closePopup(event.currentTarget);
+  }
+}
+
+// Функция закрытия попапа по Esc:
+function handlerEscPopupClose(event) {
+  if(event.key === 'Escape') {
+    // находим открытый попап и закрываем его:
+    closePopup(document.querySelector('.popup_opened'));
+  }
+}
+
 // Объявляем функцию открытия попапа (общую для всех 3-х):
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  // устанавливаем обработчик закрытия попапа по Ecs в момент открытия попапа:
+  document.addEventListener('keydown', handlerEscPopupClose);
 }
 
 // Объявляем функцию закрытия попапа (общую для всех 3-х):
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  // удаляем обработчик закрытия попапа по Ecs в момент закрытия попапа:
+  document.removeEventListener('keydown', handlerEscPopupClose);
 }
 
 // Объявляем функцию "отправки" формы редактирования профиля с сохранением введенных значений:
@@ -154,14 +179,21 @@ buttonAddPlace.addEventListener('click', () => {
 newPlaceForm.addEventListener('submit', handleNewPlaceSubmit);
 
 // Вешаем на все конопки закрытия попапов обработчики:
-popupCloseButtons.forEach(button => {
-  button.addEventListener('click', event => {
-    // Определяем, в каком именно попапе произошло нажатие кнопки закрытия:
-    const popup = event.target.closest('.popup');
-    // и передаем нужный попап в функцию закрытия попапа:
-    closePopup(popup);
-  })
-})
+// (закомментировал, т.к. функционал можно реализовать в обработчике клика мимо формы)
+// popupCloseButtons.forEach(button => {
+//   button.addEventListener('click', event => {
+//     // Определяем, в каком именно попапе произошло нажатие кнопки закрытия:
+//     const popup = event.target.closest('.popup');
+//     // и передаем нужный попап в функцию закрытия попапа:
+//     closePopup(popup);
+//   })
+// })
+
+
+// Вещаем на все попапы обработчик 'click', который закроет попап при клине ВНЕ формы:
+popups.forEach(popup => {
+  popup.addEventListener('click', handleClickPopupClose);
+});
 
 // ------------------------------------------------------------------
 // Общий функционал:
