@@ -48,9 +48,9 @@ const newPlaceLink = newPlacePopup.querySelector('#placeLink');
 // Функция закрытия попапа по клику мимо формы:
 function handleClickPopupClose(event) {
   // находим ближайшую родительскую форму элемента, по которому кликнули (если клик был вне формы, получим null):
-  const closestForm = event.target.closest('.popup__container');
+  //const closestForm = event.target.closest('.popup__container');
   // закрываем попап, если клик был все формы или на кнопке закрытия:
-  if(!closestForm || event.target.classList.contains('popup__close')) {
+  if(event.target.classList.contains('popup') || event.target.classList.contains('popup__close')) {
     closePopup(event.currentTarget);
   }
 }

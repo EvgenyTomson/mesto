@@ -1,13 +1,15 @@
 .popup__error {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
+  /* position: absolute; */
+  /* top: calc(100% + 5px);
+  left: 0; */
 
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   line-height: 15px;
   color: #ff0000;
+
+  min-height: 30px;
 
   /* временно опасити для верстки */
   opacity: 1;
