@@ -16,6 +16,8 @@ const popupProfile = document.querySelector('#profileEditPopup');
 const profileForm = popupProfile.querySelector('.popup__form');
 const inputName = popupProfile.querySelector('#inputName');
 const inputJob = popupProfile.querySelector('#inputJob');
+const inputsListEditProfileForm = Array.from(profileForm.querySelectorAll(validationParametres.inputSelector));
+const buttonSubmitEditProfileForm = profileForm.querySelector(validationParametres.submitButtonSelector);
 
 // Получаем попап с изображением:
 const imagePopup = document.querySelector('.popup_type_big');
@@ -38,6 +40,8 @@ const newPlacePopup = document.querySelector('#newPlacePopup');
 const newPlaceForm = newPlacePopup.querySelector('.popup__form');
 const newPlaceName = newPlacePopup.querySelector('#placeName');
 const newPlaceLink = newPlacePopup.querySelector('#placeLink');
+const inputsListNewPlaceForm = Array.from(newPlaceForm.querySelectorAll(validationParametres.inputSelector));
+const buttonSubmitNewPlaceForm = newPlaceForm.querySelector(validationParametres.submitButtonSelector);
 
 // Получаем все кнопки закрытия попапов (уже не нужно)):
 //const popupCloseButtons = document.querySelectorAll('.popup__close');
@@ -68,23 +72,9 @@ function openPopup(popup) {
   document.addEventListener('keydown', handlerEscPopupClose);
 }
 
-// Функция, скрывающая ошибку и очищающая текст ошибки при закрытии попапа:
-function hideErrorOnClose(popup) {
-  // Проверяем, что это не попап с картинкой:
-  if(!popup.classList.contains('popup_type_big')) {
-    const formElement = popup.querySelector(validationParametres.formSelector);
-    const inputElements = formElement.querySelectorAll(validationParametres.inputSelector);
-    inputElements.forEach(inputElement => {
-      hideInputError(formElement, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
-    });
-  }
-}
-
 // Объявляем функцию закрытия попапа (общую для всех 3-х):
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  // Если при закрытии попапа в форме висела ошибка валидации, то очищаем текст ошибки и скрываем ее:
-  hideErrorOnClose(popup);
   // удаляем обработчик закрытия попапа по Ecs в момент закрытия попапа:
   document.removeEventListener('keydown', handlerEscPopupClose);
 }
@@ -170,15 +160,16 @@ function handleNewPlaceSubmit(event) {
 
 // Открываем форму редактирования профиля:
 profileEdit.addEventListener('click', () => {
+  // Если при закрытии попапа в форме висела ошибка валидации, то очищаем текст ошибки и скрываем ее:
+  hideErrorOnOpen(popupProfile);
+
   openPopup(popupProfile);
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
 
   // Нужно проверить валидность полей при открытии.
   // Иначе, при первом запуске кнопка неактивна, при том, что поля заполнены корректно (т.к. они подтягиваются в JS):
-  const inputList = Array.from(popupProfile.querySelectorAll(validationParametres.inputSelector));
-  const buttonElement = popupProfile.querySelector(validationParametres.submitButtonSelector);
-  toggleButtonState(inputList, buttonElement, validationParametres.inactiveButtonClass);
+  toggleButtonState(inputsListEditProfileForm, buttonSubmitEditProfileForm, validationParametres.inactiveButtonClass);
 });
 
 // Сохраняем изменения профиля и закрываем форму:
@@ -187,8 +178,14 @@ profileForm.addEventListener('submit', handleProfileSubmit);
 // Открываем попап для добавления нового места:
 buttonAddPlace.addEventListener('click', () => {
   // очищаем импуты, на случай, если в этой сесиии форма уже заполнялась:
-  newPlaceName.value = '';
-  newPlaceLink.value = '';
+  newPlaceForm.reset();
+
+  // Если при закрытии попапа в форме висела ошибка валидации, то очищаем текст ошибки и скрываем ее:
+  hideErrorOnOpen(newPlacePopup);
+
+  // Нужно проверить валидность полей при открытии.
+  // Иначе, при повторном открытии формы после успешного добавления места, кнопка активно, при пустых инпутах:
+  toggleButtonState(inputsListNewPlaceForm, buttonSubmitNewPlaceForm, validationParametres.inactiveButtonClass);
 
   openPopup(newPlacePopup);
 });

@@ -69,6 +69,15 @@ function setEventListeners(formElement, validationParametres) {
   });
 };
 
+// Функция, скрывающая ошибку и очищающая текст ошибки при закрытии попапа:
+function hideErrorOnOpen(popup) {
+  const formElement = popup.querySelector(validationParametres.formSelector);
+  const inputElements = formElement.querySelectorAll(validationParametres.inputSelector);
+  inputElements.forEach(inputElement => {
+    hideInputError(formElement, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
+  });
+}
+
 
 // ---------------------------------------
 // Функция включения валидации всех форм:
