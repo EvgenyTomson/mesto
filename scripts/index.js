@@ -39,6 +39,12 @@ const newPlaceForm = newPlacePopup.querySelector('.popup__form');
 const newPlaceName = newPlacePopup.querySelector('#placeName');
 const newPlaceLink = newPlacePopup.querySelector('#placeLink');
 
+
+// Устанавливаем текущие значения профиля в value инпутов, чтобы первая валидация отрабатывала корректно:
+// inputName.value = profileName.textContent;
+// inputJob.value = profileJob.textContent;
+
+
 // Получаем все кнопки закрытия попапов (уже не нужно)):
 //const popupCloseButtons = document.querySelectorAll('.popup__close');
 
@@ -47,8 +53,6 @@ const newPlaceLink = newPlacePopup.querySelector('#placeLink');
 
 // Функция закрытия попапа по клику мимо формы:
 function handleClickPopupClose(event) {
-  // находим ближайшую родительскую форму элемента, по которому кликнули (если клик был вне формы, получим null):
-  //const closestForm = event.target.closest('.popup__container');
   // закрываем попап, если клик был все формы или на кнопке закрытия:
   if(event.target.classList.contains('popup') || event.target.classList.contains('popup__close')) {
     closePopup(event.currentTarget);
@@ -70,9 +74,23 @@ function openPopup(popup) {
   document.addEventListener('keydown', handlerEscPopupClose);
 }
 
+// Функция, скрывающая ошибку и очищающая текст ошибки при закрытии попапа:
+function hideErrorOnClose(popup) {
+  // Проверяем, что это не попап с картинкой:
+  if(!popup.classList.contains('popup_type_big')) {
+    const formElement = popup.querySelector(validationParametres.formSelector);
+    const inputElements = formElement.querySelectorAll(validationParametres.inputSelector);
+    inputElements.forEach(inputElement => {
+      hideInputError(formElement, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
+    });
+  }
+}
+
 // Объявляем функцию закрытия попапа (общую для всех 3-х):
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  // Если при закрытии попапа в форме висела ошибка валидации, то очищаем текст ошибки и скрываем ее:
+  hideErrorOnClose(popup);
   // удаляем обработчик закрытия попапа по Ecs в момент закрытия попапа:
   document.removeEventListener('keydown', handlerEscPopupClose);
 }
@@ -161,6 +179,12 @@ profileEdit.addEventListener('click', () => {
   openPopup(popupProfile);
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
+
+  // Нужно проверить валидность полей при открытии.
+  // Иначе, при первом запуске кнопка неактивна, при том, что поля заполнены корректно (т.к. они подтягиваются в JS):
+  const inputList = Array.from(popupProfile.querySelectorAll(validationParametres.inputSelector));
+  const buttonElement = popupProfile.querySelector(validationParametres.submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, validationParametres.inactiveButtonClass);
 });
 
 // Сохраняем изменения профиля и закрываем форму:
