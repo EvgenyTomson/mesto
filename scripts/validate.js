@@ -10,6 +10,7 @@ const validationParametres = {
 
 // --------------------------------------------
 
+// Объявление глобальных функций:
 // Функция показа ошибки валидации:
 function showInputError(formElement, inputElement, errorMessage, inputErrorClass, errorClass) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
@@ -51,11 +52,21 @@ function toggleButtonState(inputList, buttonElement, inactiveButtonClass) {
   }
 }
 
+// Функция, скрывающая ошибку и очищающая текст ошибки при закрытии попапа:
+function hideErrorOnOpen(popup) {
+  const formElement = popup.querySelector(validationParametres.formSelector);
+  const inputElements = formElement.querySelectorAll(validationParametres.inputSelector);
+  inputElements.forEach(inputElement => {
+    hideInputError(formElement, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
+  });
+}
+
+// ----------------------------------------------------
+
+// Установка слушателей:
 // Функция установки слушателей 'input' на все инпуты всех форм:
 function setEventListeners(formElement, validationParametres) {
-
   const {inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass} = validationParametres;
-
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   const buttonElement = formElement.querySelector(submitButtonSelector);
 
@@ -69,18 +80,7 @@ function setEventListeners(formElement, validationParametres) {
   });
 };
 
-// Функция, скрывающая ошибку и очищающая текст ошибки при закрытии попапа:
-function hideErrorOnOpen(popup) {
-  const formElement = popup.querySelector(validationParametres.formSelector);
-  const inputElements = formElement.querySelectorAll(validationParametres.inputSelector);
-  inputElements.forEach(inputElement => {
-    hideInputError(formElement, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
-  });
-}
-
-
-// ---------------------------------------
-// Функция включения валидации всех форм:
+// Функция включения валидации всех форм (установка слушателей на инпуты всех форм):
 function enableValidation(validationParametres) {
   const formList = Array.from(document.querySelectorAll(validationParametres.formSelector));
 
@@ -89,5 +89,6 @@ function enableValidation(validationParametres) {
   });
 }
 
+// ---------------------------------------
 
 enableValidation(validationParametres);
