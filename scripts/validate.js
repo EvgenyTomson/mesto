@@ -29,7 +29,6 @@ function hideInputError(formElement, inputElement, inputErrorClass, errorClass) 
 // Функция проверки валидности инпута:
 function checkInputValidity(formElement, inputElement, inputErrorClass, errorClass) {
   if (!inputElement.validity.valid) {
-    // пока захардкодил параметры!!! поправить потом:
     showInputError(formElement, inputElement, inputElement.validationMessage, inputErrorClass, errorClass);
   } else {
     hideInputError(formElement, inputElement, inputErrorClass, errorClass);
@@ -38,7 +37,6 @@ function checkInputValidity(formElement, inputElement, inputErrorClass, errorCla
 
 // Функция проверки валидности каждого инпута в форме:
 function hasInvalidInput(inputList) {
-  // console.log('hasInvalidInput');
   return inputList.some(input => !input.validity.valid)
 }
 
@@ -54,8 +52,7 @@ function toggleButtonState(inputList, buttonElement, inactiveButtonClass) {
 }
 
 // Функция установки слушателей 'input' на все инпуты всех форм:
-// function setEventListeners(formElement, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass) {
-  function setEventListeners(formElement, validationParametres) {
+function setEventListeners(formElement, validationParametres) {
 
   const {inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass} = validationParametres;
 
@@ -76,11 +73,9 @@ function toggleButtonState(inputList, buttonElement, inactiveButtonClass) {
 // ---------------------------------------
 // Функция включения валидации всех форм:
 function enableValidation(validationParametres) {
-  // const {formSelector, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass} = validationParametres;
-
   const formList = Array.from(document.querySelectorAll(validationParametres.formSelector));
+
   formList.forEach((formElement) => {
-    // setEventListeners(formElement, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass);
     setEventListeners(formElement, validationParametres);
   });
 }

@@ -39,12 +39,6 @@ const newPlaceForm = newPlacePopup.querySelector('.popup__form');
 const newPlaceName = newPlacePopup.querySelector('#placeName');
 const newPlaceLink = newPlacePopup.querySelector('#placeLink');
 
-
-// Устанавливаем текущие значения профиля в value инпутов, чтобы первая валидация отрабатывала корректно:
-// inputName.value = profileName.textContent;
-// inputJob.value = profileJob.textContent;
-
-
 // Получаем все кнопки закрытия попапов (уже не нужно)):
 //const popupCloseButtons = document.querySelectorAll('.popup__close');
 
@@ -212,7 +206,6 @@ newPlaceForm.addEventListener('submit', handleNewPlaceSubmit);
 //     closePopup(popup);
 //   })
 // })
-
 
 // Вещаем на все попапы обработчик 'click', который закроет попап при клине ВНЕ формы:
 popups.forEach(popup => {
