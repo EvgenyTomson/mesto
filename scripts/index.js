@@ -204,11 +204,9 @@ newPlaceForm.addEventListener('submit', handleNewPlaceSubmit);
 //   })
 // })
 
-// Вещаем на все попапы обработчик 'mousedown', который закроет попап при клине ВНЕ формы:
-// mousedown, а не click, т.к. при клике внутри формы, если не отпускать кнопку мыши и вывести курсор за
-// границу формы на оверлей, то при отпускании кнопки мыши попап закроется.
+// Вещаем на все попапы обработчик 'click', который закроет попап при клине ВНЕ формы:
 popups.forEach(popup => {
-  popup.addEventListener('mousedown', handleClickPopupClose);
+  popup.addEventListener('click', handleClickPopupClose);
 });
 
 // ------------------------------------------------------------------
