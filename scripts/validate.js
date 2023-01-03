@@ -93,3 +93,5 @@ function enableValidation(validationParametres) {
 // ---------------------------------------
 
 enableValidation(validationParametres);
+
+export {enableValidation, setEventListeners, hideErrorOnOpen, toggleButtonState, checkInputValidity, hideInputError, showInputError, validationParametres};

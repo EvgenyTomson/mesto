@@ -1,6 +1,11 @@
-'use strict';
+//'use strict';
+import {initialCards} from './cards.js';
+import { Card } from './Card.js';
+import {enableValidation, setEventListeners, hideErrorOnOpen, toggleButtonState, checkInputValidity, hideInputError, showInputError, validationParametres} from './validate.js';
 // ------------------------------------------------------------------
 // Объявление всех глобальных переменных:
+
+const templateSelector = '#cardTemplate';
 
 // Получаем все попапы:
 const popups = document.querySelectorAll('.popup');
@@ -21,7 +26,7 @@ const buttonSubmitEditProfileForm = profileForm.querySelector(validationParametr
 
 // Получаем попап с изображением:
 const imagePopup = document.querySelector('.popup_type_big');
-// получаем элемент картинки попапа:
+// // получаем элемент картинки попапа:
 const popupImage = imagePopup.querySelector('.popup__image');
 // и описание картинки попапа:
 const popupCaption = imagePopup.querySelector('.popup__caption');
@@ -138,7 +143,9 @@ function showImage(name, link) {
 // Функция добавления нового места:
 function addPlace(placeData) {
   // Создаем карточку и получаем монтируем ее в начало секции с карточками:
-  cardsHolder.prepend(createCard(placeData));
+  //cardsHolder.prepend(createCard(placeData));
+  const card = new Card(placeData, templateSelector);
+  cardsHolder.prepend(card.creator());
 }
 
 // Добавляем новое место:
@@ -216,3 +223,5 @@ popups.forEach(popup => {
 initialCards.forEach(cardData => {
   addPlace(cardData);
 });
+
+export {imagePopup, popupImage, popupCaption, openPopup};
