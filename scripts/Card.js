@@ -1,4 +1,5 @@
-import { imagePopup, popupImage, popupCaption, openPopup } from './index.js';
+//import { imagePopup, popupImage, popupCaption, openPopup } from './index.js';
+import { showImage } from './index.js';
 
 export class Card {
   constructor(placeData, templateSelector) {
@@ -33,7 +34,7 @@ export class Card {
     //const like = this.card.querySelector('.card__like');
     this._like.addEventListener('click', () => this._likeCard());
     // показ попапа с картинкой
-    this._cardImg.addEventListener('click', () => this._showImage());
+    this._cardImg.addEventListener('click', () => this._showImage(this.name, this.link));
   }
 
   _deleteCard() {
@@ -45,14 +46,16 @@ export class Card {
     this._like.classList.toggle('card__like_active');
   }
 
-  _showImage() {
-    popupImage.src = this.link;
-    // записываем название нужной карточки в alt и figcaption:
-    popupImage.setAttribute('alt', ` ${this.name}.`);
-    popupCaption.textContent = this.name;
+  _showImage = showImage
 
-    openPopup(imagePopup);
-  }
+  // _showImage() {
+  //   popupImage.src = this.link;
+  //   // записываем название нужной карточки в alt и figcaption:
+  //   popupImage.setAttribute('alt', ` ${this.name}.`);
+  //   popupCaption.textContent = this.name;
+
+  //   openPopup(imagePopup);
+  // }
 
 } //Card
 

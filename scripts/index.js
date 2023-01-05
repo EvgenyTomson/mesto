@@ -1,10 +1,11 @@
-//'use strict';
-import {initialCards} from './cards.js';
+import { initialCards, validationParametres } from './initialData.js';
 import { Card } from './Card.js';
-import {enableValidation, setEventListeners, hideErrorOnOpen, toggleButtonState, checkInputValidity, hideInputError, showInputError, validationParametres} from './validate.js';
+import { FormValidator } from './FormValidator.js';
+//import {enableValidation, setEventListeners, hideErrorOnOpen, toggleButtonState, checkInputValidity, hideInputError, showInputError, validationParametres} from './validate.js';
 // ------------------------------------------------------------------
 // Объявление всех глобальных переменных:
 
+// Селектор для выбора шаблона карточки:
 const templateSelector = '#cardTemplate';
 
 // Получаем все попапы:
@@ -21,8 +22,8 @@ const popupProfile = document.querySelector('#profileEditPopup');
 const profileForm = popupProfile.querySelector('.popup__form');
 const inputName = popupProfile.querySelector('#inputName');
 const inputJob = popupProfile.querySelector('#inputJob');
-const inputsListEditProfileForm = Array.from(profileForm.querySelectorAll(validationParametres.inputSelector));
-const buttonSubmitEditProfileForm = profileForm.querySelector(validationParametres.submitButtonSelector);
+//const inputsListEditProfileForm = Array.from(profileForm.querySelectorAll(validationParametres.inputSelector));
+//const buttonSubmitEditProfileForm = profileForm.querySelector(validationParametres.submitButtonSelector);
 
 // Получаем попап с изображением:
 const imagePopup = document.querySelector('.popup_type_big');
@@ -32,7 +33,7 @@ const popupImage = imagePopup.querySelector('.popup__image');
 const popupCaption = imagePopup.querySelector('.popup__caption');
 
 // Получаем шаблон карточки:
-const cardTemplate = document.querySelector('#cardTemplate').content.querySelector('.card');
+//const cardTemplate = document.querySelector('#cardTemplate').content.querySelector('.card');
 
 // Получаем контейнер для карточек:
 const cardsHolder = document.querySelector('.elements__cards');
@@ -45,8 +46,35 @@ const newPlacePopup = document.querySelector('#newPlacePopup');
 const newPlaceForm = newPlacePopup.querySelector('.popup__form');
 const newPlaceName = newPlacePopup.querySelector('#placeName');
 const newPlaceLink = newPlacePopup.querySelector('#placeLink');
-const inputsListNewPlaceForm = Array.from(newPlaceForm.querySelectorAll(validationParametres.inputSelector));
-const buttonSubmitNewPlaceForm = newPlaceForm.querySelector(validationParametres.submitButtonSelector);
+//const inputsListNewPlaceForm = Array.from(newPlaceForm.querySelectorAll(validationParametres.inputSelector));
+//const buttonSubmitNewPlaceForm = newPlaceForm.querySelector(validationParametres.submitButtonSelector);
+
+
+
+// Создаем экземпляры класса FormValidator для каждой валидируемой формы:
+const profileFormValidator = new FormValidator(validationParametres, profileForm);
+const newPlaceFormValidator = new FormValidator(validationParametres, newPlaceForm);
+
+profileFormValidator.enableValidation();
+newPlaceFormValidator.enableValidation();
+
+
+// function hideErrorOnOpen(formVilidatorObject) {
+//   const formElement = popup.querySelector(validationParametres.formSelector);
+//   const inputElements = formElement.querySelectorAll(validationParametres.inputSelector);
+//   inputElements.forEach(inputElement => {
+//     hideInputError(formElement, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
+//   });
+// }
+
+// function hideErrorOnOpen(popup) {
+//   const formElement = popup.querySelector(validationParametres.formSelector);
+//   const inputElements = formElement.querySelectorAll(validationParametres.inputSelector);
+//   inputElements.forEach(inputElement => {
+//     hideInputError(formElement, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
+//   });
+// }
+
 
 // Получаем все кнопки закрытия попапов (уже не нужно)):
 //const popupCloseButtons = document.querySelectorAll('.popup__close');
@@ -96,38 +124,38 @@ function handleProfileSubmit(event) {
 }
 
 // Функция создания элемента карточки (со всем её функционалом):
-function createCard(placeData) {
-  const {name, link} = placeData;
-  const card = cardTemplate.cloneNode(true);
-  const cardImg = card.querySelector('.card__image');
-  const cardTitle = card.querySelector('.card__title');
-  cardImg.src = link;
-  cardImg.setAttribute('alt', ` ${name}.`);
-  cardTitle.textContent = name;
+// function createCard(placeData) {
+//   const {name, link} = placeData;
+//   const card = cardTemplate.cloneNode(true);
+//   const cardImg = card.querySelector('.card__image');
+//   const cardTitle = card.querySelector('.card__title');
+//   cardImg.src = link;
+//   cardImg.setAttribute('alt', ` ${name}.`);
+//   cardTitle.textContent = name;
 
-  // При добавлении карточки сразу вешаем на ее кнопку удаления событие:
-  const cardDeleteBtn = card.querySelector('.card__delete');
-  cardDeleteBtn.addEventListener('click', () => deleteCard(card));
-  // также добавляем функционал лайков:
-  const like = card.querySelector('.card__like');
-  like.addEventListener('click', likeCard);
-  // и открытие попапа по клику на изображение:
-  cardImg.addEventListener('click', () => showImage(name, link));
+//   // При добавлении карточки сразу вешаем на ее кнопку удаления событие:
+//   const cardDeleteBtn = card.querySelector('.card__delete');
+//   cardDeleteBtn.addEventListener('click', () => deleteCard(card));
+//   // также добавляем функционал лайков:
+//   const like = card.querySelector('.card__like');
+//   like.addEventListener('click', likeCard);
+//   // и открытие попапа по клику на изображение:
+//   cardImg.addEventListener('click', () => showImage(name, link));
 
-  // Возвращаем ссылку на карточку:
-  return card
-}
+//   // Возвращаем ссылку на карточку:
+//   return card
+// }
 
 // Функция удаления карточки:
-function deleteCard(card) {
-  card.remove();
-}
+// function deleteCard(card) {
+//   card.remove();
+// }
 
 // Функция простановки и снятия лайка:
-function likeCard(event) {
-  const currentLike = event.target;
-  currentLike.classList.toggle('card__like_active');
-}
+// function likeCard(event) {
+//   const currentLike = event.target;
+//   currentLike.classList.toggle('card__like_active');
+// }
 
 // Функция открытия попапа с картинкой по клику на картинке в карточке:
 function showImage(name, link) {
@@ -142,7 +170,7 @@ function showImage(name, link) {
 
 // Функция добавления нового места:
 function addPlace(placeData) {
-  // Создаем карточку и получаем монтируем ее в начало секции с карточками:
+  // Создаем карточку и монтируем ее в начало секции с карточками:
   //cardsHolder.prepend(createCard(placeData));
   const card = new Card(placeData, templateSelector);
   cardsHolder.prepend(card.creator());
@@ -168,15 +196,18 @@ function handleNewPlaceSubmit(event) {
 // Открываем форму редактирования профиля:
 profileEdit.addEventListener('click', () => {
   // Если при закрытии попапа в форме висела ошибка валидации, то очищаем текст ошибки и скрываем ее:
-  hideErrorOnOpen(popupProfile);
+  //hideErrorOnOpen(popupProfile);
 
   openPopup(popupProfile);
   inputName.value = profileName.textContent;
   inputJob.value = profileJob.textContent;
 
+  // Используем публичный метод объекта валидации для очистки ошибок и переключения состояния кнопки:
+  profileFormValidator.hideErrorOnOpen();
+
   // Нужно проверить валидность полей при открытии.
   // Иначе, при первом запуске кнопка неактивна, при том, что поля заполнены корректно (т.к. они подтягиваются в JS):
-  toggleButtonState(inputsListEditProfileForm, buttonSubmitEditProfileForm, validationParametres.inactiveButtonClass);
+  //toggleButtonState(inputsListEditProfileForm, buttonSubmitEditProfileForm, validationParametres.inactiveButtonClass);
 });
 
 // Сохраняем изменения профиля и закрываем форму:
@@ -188,11 +219,14 @@ buttonAddPlace.addEventListener('click', () => {
   newPlaceForm.reset();
 
   // Если при закрытии попапа в форме висела ошибка валидации, то очищаем текст ошибки и скрываем ее:
-  hideErrorOnOpen(newPlacePopup);
+  //hideErrorOnOpen(newPlacePopup);
+
+  // Используем публичный метод объекта валидации для очистки ошибок и переключения состояния кнопки:
+  newPlaceFormValidator.hideErrorOnOpen();
 
   // Нужно проверить валидность полей при открытии.
   // Иначе, при повторном открытии формы после успешного добавления места, кнопка активно, при пустых инпутах:
-  toggleButtonState(inputsListNewPlaceForm, buttonSubmitNewPlaceForm, validationParametres.inactiveButtonClass);
+  //toggleButtonState(inputsListNewPlaceForm, buttonSubmitNewPlaceForm, validationParametres.inactiveButtonClass);
 
   openPopup(newPlacePopup);
 });
@@ -224,4 +258,5 @@ initialCards.forEach(cardData => {
   addPlace(cardData);
 });
 
-export {imagePopup, popupImage, popupCaption, openPopup};
+//export {imagePopup, popupImage, popupCaption, openPopup};
+export { showImage }
