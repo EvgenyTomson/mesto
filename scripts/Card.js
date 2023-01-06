@@ -1,9 +1,7 @@
-//import { imagePopup, popupImage, popupCaption, openPopup } from './index.js';
-import { showImage } from './index.js';
+import { showImage } from './utils.js';
 
 export class Card {
   constructor(placeData, templateSelector) {
-    //const {name, link} = placeData;
     this.name = placeData.name;
     this.link = placeData.link;
     this._template = document.querySelector(templateSelector).content.querySelector('.card');
@@ -28,10 +26,8 @@ export class Card {
 
   _setCardListeners() {
     // удаление карточки
-    //const cardDeleteBtn = this.card.querySelector('.card__delete');
     this._cardDeleteBtn.addEventListener('click', () => this._deleteCard());
     // лайк карточки
-    //const like = this.card.querySelector('.card__like');
     this._like.addEventListener('click', () => this._likeCard());
     // показ попапа с картинкой
     this._cardImg.addEventListener('click', () => this._showImage(this.name, this.link));
@@ -42,7 +38,6 @@ export class Card {
   }
 
   _likeCard() {
-    //const currentLike = event.target;
     this._like.classList.toggle('card__like_active');
   }
 
