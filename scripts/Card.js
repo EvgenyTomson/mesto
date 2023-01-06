@@ -43,14 +43,5 @@ export class Card {
 
   _showImage = showImage
 
-  // _showImage() {
-  //   popupImage.src = this.link;
-  //   // записываем название нужной карточки в alt и figcaption:
-  //   popupImage.setAttribute('alt', ` ${this.name}.`);
-  //   popupCaption.textContent = this.name;
-
-  //   openPopup(imagePopup);
-  // }
-
-} //Card
+}
 
