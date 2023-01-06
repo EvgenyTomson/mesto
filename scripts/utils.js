@@ -7,6 +7,10 @@ const popupCaption = imagePopup.querySelector('.popup__caption');
 
 // Функция открытия попапа с картинкой по клику на картинке в карточке:
 function showImage(name, link) {
+  // очищаем предыдущие значения (поскольку на закрытии у всех 3-х попапов один обработчик)
+  popupImage.src = '';
+  popupImage.setAttribute('alt', '');
+  popupCaption.textContent = '';
   // устаналиваем ссылку на нужную картинку:
   popupImage.src = link;
   // записываем название нужной карточки в alt и figcaption:
@@ -32,17 +36,8 @@ function openPopup(popup) {
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-
-  // очищаем данные по картинке, если это попап с картинкой.
-  // иначе, при открытии попапа с недоступной картинкой сачала на секунду появляется предудущая.
-  if (popup.classList.contains('popup_type_big')) {
-    popupImage.src = '';
-    popupImage.setAttribute('alt', '');
-    popupCaption.textContent = '';
-  }
   // удаляем обработчик закрытия попапа по Ecs в момент закрытия попапа:
   document.removeEventListener('keydown', handlerEscPopupClose);
 }
 
-// export { imagePopup, popupImage, popupCaption, showImage, handlerEscPopupClose, openPopup, closePopup }
 export { showImage, openPopup, closePopup }

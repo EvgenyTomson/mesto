@@ -1,21 +1,17 @@
-// Параметры валидации:
-import { validationParametres } from './initialData.js';
-
-// --------------------------------------------
-
 export class FormValidator {
   constructor(validationParametres, formElement) {
     this.form = formElement;
     this.inputList = Array.from(this.form.querySelectorAll(validationParametres.inputSelector));
     this.submitButton = this.form.querySelector(validationParametres.submitButtonSelector);
+    this._validationParametres = validationParametres;
   }
 
   enableValidation() {
-    this._setEventListeners(validationParametres);
+    this._setEventListeners();
   }
 
-  _setEventListeners(validationParametres) {
-    const {inactiveButtonClass, inputErrorClass, errorClass} = validationParametres;
+  _setEventListeners() {
+    const {inactiveButtonClass, inputErrorClass, errorClass} = this._validationParametres;
 
     this.inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
@@ -64,10 +60,10 @@ export class FormValidator {
   hideErrorOnOpen() {
 
   this.inputList.forEach(inputElement => {
-    this._hideInputError(this.form, inputElement, validationParametres.inputErrorClass, validationParametres.errorClass);
+    this._hideInputError(this.form, inputElement, this._validationParametres.inputErrorClass, this._validationParametres.errorClass);
   })
 
-  this._toggleButtonState(validationParametres.inactiveButtonClass);
+  this._toggleButtonState(this._validationParametres.inactiveButtonClass);
 }
 
 }
