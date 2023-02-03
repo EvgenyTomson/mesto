@@ -1,7 +1,3 @@
-//import { showImage } from './utils.js';
-//import { PopupWithImage } from './PopupWithImage.js';
-//import { imagePopupElem } from './index.js';
-
 export class Card {
   constructor(placeData, templateSelector, handleCardClick) {
     this.name = placeData.name;
@@ -34,7 +30,6 @@ export class Card {
     this._like.addEventListener('click', () => this._likeCard());
     // показ попапа с картинкой
     this._cardImg.addEventListener('click', () => this._handleCardClick(this.name, this.link));
-    //imagePopupElem.open(this.name, this.link));//this._showImage(this.name, this.link));
   }
 
   _deleteCard() {
@@ -44,8 +39,5 @@ export class Card {
   _likeCard() {
     this._like.classList.toggle('card__like_active');
   }
-
-  //_showImage = showImage
-
 }
 

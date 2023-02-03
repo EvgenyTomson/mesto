@@ -9,7 +9,6 @@ export class UserInfo {
   }
 
   setUserInfo({user, info}) {
-    //console.log(user, info);
     this._user.textContent = user;
     this._info.textContent = info;
   }

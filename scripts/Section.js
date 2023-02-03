@@ -7,7 +7,6 @@ export class Section {
 
   drawInitial() {
     this._items.forEach(item => {
-      //console.log(item);
       this._renderer(item, this._container);
     })
   }
@@ -16,7 +15,3 @@ export class Section {
     this._renderer(item, this._container);
   }
 }
-
-// function renderer(renderedItem, container) {
-//   container.prepend(renderedItem);
-// }

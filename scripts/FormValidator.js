@@ -58,7 +58,6 @@ export class FormValidator {
   }
 
   hideErrorOnOpen() {
-
   this.inputList.forEach(inputElement => {
     this._hideInputError(this.form, inputElement, this._validationParametres.inputErrorClass, this._validationParametres.errorClass);
   })
