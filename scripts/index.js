@@ -2,6 +2,11 @@ import { initialCards, validationParametres } from './initialData.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
 import { openPopup, closePopup } from './utils.js';
+import { Section } from './Section.js';
+import { Popup } from './Popup.js';
+import { PopupWithImage } from './PopupWithImage.js';
+import { PopupWithForm } from './PopupWithForm.js';
+import { UserInfo } from './UserInfo.js';
 
 // ------------------------------------------------------------------
 
@@ -9,6 +14,53 @@ import { openPopup, closePopup } from './utils.js';
 
 // Селектор для выбора шаблона карточки:
 const templateSelector = '#cardTemplate';
+
+// Селектор для выбора контейнера карточек:
+const containerSelector = '.elements__cards';
+
+// Селекторы попапов:
+const profilePopupSelector = '#profileEditPopup';
+const addPlacePopupSelector = '#newPlacePopup';
+const imagePopupSelector = '#viewImagePopup';
+
+// Создаем экземпляр класса UserInfo:
+const currentUser = new UserInfo('.profile__name', '.profile__about');
+currentUser.getUserInfo();
+
+
+function handleImageClick(name, link) {
+  imagePopupElem.open(name, link);
+}
+
+function placeSubmitHandler(data) {
+ // console.log(data);
+  const placeData = {name: data[0], link: data[1]};
+  //console.log(placeData);
+
+  const card = new Card(placeData, templateSelector, handleImageClick);
+  //console.log(card.creator());
+  cardsSection.addItem(card.creator());
+}
+
+function profileSubmitHandler(data) {
+  //console.log(data);
+
+  // profileName.textContent = data[0];
+  // profileJob.textContent = data[1];
+  currentUser.setUserInfo({user: data[0], info: data[1]});
+}
+
+
+// Создаем экземпляры класса Popup:
+const profilePopup = new PopupWithForm(profilePopupSelector, profileSubmitHandler);
+const addPlacePopup = new PopupWithForm(addPlacePopupSelector, placeSubmitHandler);
+// Создаем экземпляр класса PopupWithImage:
+const imagePopupElem = new PopupWithImage(imagePopupSelector);
+
+// Вещаем на попапы обработчики событий:
+profilePopup.setEventListeners();
+addPlacePopup.setEventListeners();
+imagePopupElem.setEventListeners();
 
 // Получаем все попапы:
 const popups = document.querySelectorAll('.popup');
@@ -63,15 +115,20 @@ function handleProfileSubmit(event) {
   profileName.textContent = inputName.value;
   profileJob.textContent = inputJob.value;
 
-  closePopup(popupProfile);
+  profilePopup.close();
+  //closePopup(popupProfile);
 }
 
 // Функция добавления нового места:
-function addPlace(placeData) {
-  // Создаем карточку и монтируем ее в начало секции с карточками:
-  //cardsHolder.prepend(createCard(placeData));
-  const card = new Card(placeData, templateSelector);
-  cardsHolder.prepend(card.creator());
+// function addPlace(placeData) {
+//   // Создаем карточку и монтируем ее в начало секции с карточками:
+//   //cardsHolder.prepend(createCard(placeData));
+//   const card = new Card(placeData, templateSelector);
+//   cardsHolder.prepend(card.creator());
+// }
+
+function renderer(renderedItem, container) {
+  container.prepend(renderedItem);
 }
 
 // Добавляем новое место:
@@ -83,9 +140,12 @@ function handleNewPlaceSubmit(event) {
   const placeLink = newPlaceLink.value;
   const placeData = {name: placeName, link: placeLink};
 
-  addPlace(placeData);
+  const card = new Card(placeData, templateSelector, handleImageClick);
+  cardsSection.addItem(card.creator());
+  //addPlace(placeData);
 
-  closePopup(newPlacePopup);
+  addPlacePopup.close();
+  //closePopup(newPlacePopup);
 }
 
 // ------------------------------------------------------------------
@@ -100,11 +160,12 @@ profileEdit.addEventListener('click', () => {
   // Иначе, при первом запуске кнопка неактивна, при том, что поля заполнены корректно (т.к. они подтягиваются в JS):
   profileFormValidator.hideErrorOnOpen();
 
-  openPopup(popupProfile);
+  profilePopup.open();
+  //openPopup(popupProfile);
 });
 
 // Сохраняем изменения профиля и закрываем форму:
-profileForm.addEventListener('submit', handleProfileSubmit);
+//profileForm.addEventListener('submit', handleProfileSubmit);
 
 // Открываем попап для добавления нового места:
 buttonAddPlace.addEventListener('click', () => {
@@ -115,21 +176,34 @@ buttonAddPlace.addEventListener('click', () => {
   // Иначе, при повторном открытии формы после успешного добавления места, кнопка активно, при пустых инпутах:
   newPlaceFormValidator.hideErrorOnOpen();
 
-  openPopup(newPlacePopup);
+  addPlacePopup.open();
+  //openPopup(newPlacePopup);
 });
 
 // Добавление нового места:
-newPlaceForm.addEventListener('submit', handleNewPlaceSubmit);
+//newPlaceForm.addEventListener('submit', handleNewPlaceSubmit);
 
 // Вещаем на все попапы обработчик 'click', который закроет попап при клине ВНЕ формы:
-popups.forEach(popup => {
-  popup.addEventListener('click', handleClickPopupClose);
-});
+// popups.forEach(popup => {
+//   popup.addEventListener('click', handleClickPopupClose);
+// });
 
 // ------------------------------------------------------------------
 // Общий функционал:
 
-// Вставляем начальные карточки из массива:
-initialCards.forEach(cardData => {
-  addPlace(cardData);
+// Создаем массив начальных карточек из входного массива данных:
+const initialCardElements = initialCards.map(data => {
+  const card = new Card(data, templateSelector, handleImageClick);
+  return card.creator();
 });
+
+// Создаем экземпляр класса Section для рендера карточек:
+const cardsSection = new Section({items: initialCardElements, renderer}, containerSelector);
+
+// Вставляем начальные карточки из массива:
+cardsSection.drawInitial();
+
+// Вставляем начальные карточки из массива:
+// initialCards.forEach(cardData => {
+//   addPlace(cardData);
+// });
