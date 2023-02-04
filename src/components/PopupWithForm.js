@@ -9,25 +9,19 @@ export class PopupWithForm extends Popup {
   }
 
   _getInputValues() {
-    return this._inputList.map(input => input.value);
+    const result = {};
+    this._inputList.forEach(input => result[input.name] = input.value);
+    return result
   }
 
   close() {
     this._form.reset();
-    this._popup.classList.remove('popup_opened');
-    // удаляем обработчик закрытия попапа по Ecs в момент закрытия попапа:
-    document.removeEventListener('keydown', (evt) => {
-      this._handleEscClose(evt);
-    });
+
+    super.close();
   }
 
   setEventListeners() {
-    this._popup.addEventListener('click', (event) => {
-      // закрываем попап, если клик был на оверлее или на кнопке закрытия:
-      if(event.target === this._popup || event.target === this._closeButton) {
-        this.close();
-      }
-    });
+    super.setEventListeners();
 
     this._form.addEventListener('submit', (evt) => {
       evt.preventDefault();

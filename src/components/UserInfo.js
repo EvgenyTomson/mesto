@@ -8,8 +8,8 @@ export class UserInfo {
     return {user: this._user.textContent, info: this._info.textContent}
   }
 
-  setUserInfo({user, info}) {
-    this._user.textContent = user;
-    this._info.textContent = info;
+  setUserInfo({username, userjob}) {
+    this._user.textContent = username;
+    this._info.textContent = userjob;
   }
 }

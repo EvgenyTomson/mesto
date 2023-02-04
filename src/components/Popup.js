@@ -4,26 +4,22 @@ export class Popup {
     this._closeButton = this._popup.querySelector(closeButtonSelector);
   }
 
-  _handleEscClose(event) {
+  _handleEscClose = (event) => {
     if(event.key === 'Escape') {
       this.close();
     }
   }
 
-  open() {
-    this._popup.classList.add('popup_opened');
+  open () {
+this._popup.classList.add('popup_opened');
     // устанавливаем обработчик закрытия попапа по Ecs в момент открытия попапа:
-    document.addEventListener('keydown', (evt) => {
-      this._handleEscClose(evt)
-    });
+    document.addEventListener('keydown', this._handleEscClose);
   }
 
   close() {
     this._popup.classList.remove('popup_opened');
     // удаляем обработчик закрытия попапа по Ecs в момент закрытия попапа:
-    document.removeEventListener('keydown', (evt) => {
-      this._handleEscClose(evt);
-    });
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 
   setEventListeners() {

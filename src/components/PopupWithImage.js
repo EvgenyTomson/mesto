@@ -8,19 +8,12 @@ export class PopupWithImage extends Popup {
   }
 
   open(name, link) {
-    this._image.src = '';
-    this._image.setAttribute('alt', '');
-    this._caption.textContent = '';
     // устаналиваем ссылку на нужную картинку:
     this._image.src = link;
     // записываем название нужной карточки в alt и figcaption:
     this._image.setAttribute('alt', ` ${name}.`);
     this._caption.textContent = name;
 
-    this._popup.classList.add('popup_opened');
-    // устанавливаем обработчик закрытия попапа по Ecs в момент открытия попапа:
-    document.addEventListener('keydown', (evt) => {
-      this._handleEscClose(evt)
-    });
+    super.open();
   }
 }

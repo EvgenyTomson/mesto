@@ -1,4 +1,7 @@
-import { initialCards, validationParametres } from '../utils/initialData.js';
+import { initialCards } from '../utils/initialData.js';
+import { validationParametres, templateSelector, containerSelector, closeButtonSelector,
+        profilePopupSelector, placePopupSelector, imagePopupSelector,
+        profileEdit, profileForm, inputName, inputJob, buttonAddPlace, newPlaceForm } from '../utils/constants.js';
 import { Card } from '../components/Card.js';
 import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
@@ -10,73 +13,37 @@ import './index.css';
 
 // ------------------------------------------------------------------
 
-// Объявление всех глобальных переменных:
-
-// Селектор для выбора шаблона карточки:
-const templateSelector = '#cardTemplate';
-
-// Селектор для выбора контейнера карточек:
-const containerSelector = '.elements__cards';
-
-// Селектор кнопки закрытия попапа:
-const closeButtonSelector = '.popup__close';
-
-// Селекторы попапов:
-const profilePopupSelector = '#profileEditPopup';
-const addPlacePopupSelector = '#newPlacePopup';
-const imagePopupSelector = '#viewImagePopup';
-
 // Создаем экземпляр класса UserInfo:
 const currentUser = new UserInfo('.profile__name', '.profile__about');
-currentUser.getUserInfo();
 
-
+// Объявляем коллбек для открытия попапа с картинкой:
 function handleImageClick(name, link) {
   imagePopupElem.open(name, link);
 }
 
-function placeSubmitHandler(data) {
-  const placeData = {name: data[0], link: data[1]};
+// Объявляем коллбек сабмита формы добавления карточки:
+function handlePlaceSubmit(data) {
+  const placeData = {name: data.placename, link: data.placelink};
   const card = new Card(placeData, templateSelector, handleImageClick);
-  cardsSection.addItem(card.creator());
+  cardsSection.addItem(card.create());
 }
 
-function profileSubmitHandler(data) {
-  currentUser.setUserInfo({user: data[0], info: data[1]});
+// Объявляем коллбек сабмита формы редактирования профиля:
+function handleProfileSubmit(data) {
+  currentUser.setUserInfo(data);
 }
 
 // Создаем экземпляры класса PopupWithForm:
-const profilePopup = new PopupWithForm(profilePopupSelector, closeButtonSelector, profileSubmitHandler);
-const addPlacePopup = new PopupWithForm(addPlacePopupSelector, closeButtonSelector, placeSubmitHandler);
+const profilePopup = new PopupWithForm(profilePopupSelector, closeButtonSelector, handleProfileSubmit);
+const placePopup = new PopupWithForm(placePopupSelector, closeButtonSelector, handlePlaceSubmit);
 
 // Создаем экземпляр класса PopupWithImage:
 const imagePopupElem = new PopupWithImage(imagePopupSelector, closeButtonSelector);
 
 // Вещаем на попапы обработчики событий:
 profilePopup.setEventListeners();
-addPlacePopup.setEventListeners();
+placePopup.setEventListeners();
 imagePopupElem.setEventListeners();
-
-// Получаем кнопку редактирования профиля:
-const profileEdit = document.querySelector('.profile__edit');
-// Получаем данные текущего профиля:
-const profileName = document.querySelector('.profile__name');
-const profileJob = document.querySelector('.profile__about');
-
-// Получаем попап редактирования профиля и его элементы:
-const popupProfile = document.querySelector('#profileEditPopup');
-const profileForm = popupProfile.querySelector('.popup__form');
-const inputName = popupProfile.querySelector('#inputName');
-const inputJob = popupProfile.querySelector('#inputJob');
-
-// Получаем кнопку добавляения нового места:
-const buttonAddPlace = document.querySelector('.profile__add-place');
-
-// Получаем попап добавления нового места и его элементы:
-const newPlacePopup = document.querySelector('#newPlacePopup');
-const newPlaceForm = newPlacePopup.querySelector('.popup__form');
-const newPlaceName = newPlacePopup.querySelector('#placeName');
-const newPlaceLink = newPlacePopup.querySelector('#placeLink');
 
 // Создаем экземпляры класса FormValidator для каждой валидируемой формы:
 const profileFormValidator = new FormValidator(validationParametres, profileForm);
@@ -97,24 +64,23 @@ function renderer(renderedItem, container) {
 
 // Открываем форму редактирования профиля:
 profileEdit.addEventListener('click', () => {
-  inputName.value = profileName.textContent;
-  inputJob.value = profileJob.textContent;
+  const {user, info } = currentUser.getUserInfo();
+  inputName.value = user;
+  inputJob.value = info;
   // Используем публичный метод объекта валидации для очистки ошибок и переключения состояния кнопки.
   // Иначе, при первом запуске кнопка неактивна, при том, что поля заполнены корректно (т.к. они подтягиваются в JS):
-  profileFormValidator.hideErrorOnOpen();
+  profileFormValidator.resetValidation();
 
   profilePopup.open();
 });
 
 //Открываем попап для добавления нового места:
 buttonAddPlace.addEventListener('click', () => {
-  // очищаем импуты, на случай, если в этой сесиии форма уже заполнялась:
-  newPlaceForm.reset();
   // Используем публичный метод объекта валидации для очистки ошибок и переключения состояния кнопки.
   // Иначе, при повторном открытии формы после успешного добавления места, кнопка активно, при пустых инпутах:
-  newPlaceFormValidator.hideErrorOnOpen();
+  newPlaceFormValidator.resetValidation();
 
-  addPlacePopup.open();
+  placePopup.open();
 });
 
 // ------------------------------------------------------------------
@@ -123,11 +89,11 @@ buttonAddPlace.addEventListener('click', () => {
 // Создаем массив начальных карточек из входного массива данных:
 const initialCardElements = initialCards.map(data => {
   const card = new Card(data, templateSelector, handleImageClick);
-  return card.creator();
+  return card.create();
 });
 
 // Создаем экземпляр класса Section для рендера карточек:
-const cardsSection = new Section({items: initialCardElements, renderer}, containerSelector);
+const cardsSection = new Section(renderer, containerSelector);
 
 // Вставляем начальные карточки из массива:
-cardsSection.drawInitial();
+cardsSection.drawInitial(initialCardElements);
