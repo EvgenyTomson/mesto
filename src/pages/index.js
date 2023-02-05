@@ -16,6 +16,12 @@ import './index.css';
 // Создаем экземпляр класса UserInfo:
 const currentUser = new UserInfo('.profile__name', '.profile__about');
 
+// Функция создания элемента карточки:
+const createCard = (cardData, templateSelector, handleCardClick) => {
+  const card = new Card(cardData, templateSelector, handleCardClick);
+  return card.create();
+}
+
 // Объявляем коллбек для открытия попапа с картинкой:
 function handleImageClick(name, link) {
   imagePopupElem.open(name, link);
@@ -24,13 +30,14 @@ function handleImageClick(name, link) {
 // Объявляем коллбек сабмита формы добавления карточки:
 function handlePlaceSubmit(data) {
   const placeData = {name: data.placename, link: data.placelink};
-  const card = new Card(placeData, templateSelector, handleImageClick);
-  cardsSection.addItem(card.create());
+  cardsSection.addItem(createCard(placeData, templateSelector, handleImageClick));
+  this.close();
 }
 
 // Объявляем коллбек сабмита формы редактирования профиля:
 function handleProfileSubmit(data) {
   currentUser.setUserInfo(data);
+  this.close();
 }
 
 // Создаем экземпляры класса PopupWithForm:
@@ -88,8 +95,7 @@ buttonAddPlace.addEventListener('click', () => {
 
 // Создаем массив начальных карточек из входного массива данных:
 const initialCardElements = initialCards.map(data => {
-  const card = new Card(data, templateSelector, handleImageClick);
-  return card.create();
+  return createCard(data, templateSelector, handleImageClick)
 });
 
 // Создаем экземпляр класса Section для рендера карточек:

@@ -11,7 +11,7 @@ export class Popup {
   }
 
   open () {
-this._popup.classList.add('popup_opened');
+    this._popup.classList.add('popup_opened');
     // устанавливаем обработчик закрытия попапа по Ecs в момент открытия попапа:
     document.addEventListener('keydown', this._handleEscClose);
   }
