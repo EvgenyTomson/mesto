@@ -18,4 +18,4 @@ ____
 Макет можно посмотреть по [ссылке](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=0%3A1).
 
 ____
-Рабочая версия проекта доступна [здесь](https://evgenytomson.github.io/mesto/).
+Рабочая версия проекта доступна [здесь](https://evgenytomson.github.io/dist-mesto/).
