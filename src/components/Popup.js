@@ -24,7 +24,6 @@ export class Popup {
 
   setEventListeners() {
     this._popup.addEventListener('click', (event) => {
-      // закрываем попап, если клик был на оверлее или на кнопке закрытия:
       if(event.target === this._popup || event.target === this._closeButton) {
         this.close();
       }
