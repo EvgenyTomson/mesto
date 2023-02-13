@@ -1,7 +1,8 @@
-import { initialCards } from '../utils/initialData.js';
+//import { initialCards } from '../utils/initialData.js';
 import { validationParametres, templateSelector, foreignTemplateSelector, containerSelector, closeButtonSelector,
         profilePopupSelector, placePopupSelector, imagePopupSelector, avatarPopupSelector, deleteCardPopupSelectoor,
-        profileEdit, profileForm, inputName, inputJob, buttonAddPlace, newPlaceForm, avatarForm, apiOptions } from '../utils/constants.js';
+        profileEdit, profileForm, inputName, inputJob, buttonAddPlace, newPlaceForm, avatarForm, apiOptions,
+        profileAvatar } from '../utils/constants.js';
 import { Card } from '../components/Card.js';
 import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
@@ -15,8 +16,18 @@ import './index.css';
 
 // ------------------------------------------------------------------
 
+//let initialCards = [];
+//let initialCardElements;
+
 // Создаем экземпляр класса Api:
 const api = new Api(apiOptions);
+// api.getInitialCards()
+//   .then(initialCardsData => {
+//     console.log('InitialCardsData: ', initialCardsData);
+//   })
+//   .catch(err => console.log('Get Initial Cards Error: ', err));
+
+//console.log('initialCardElements: ', initialCardElements);
 
 // Создаем экземпляр класса UserInfo:
 const currentUser = new UserInfo('.profile__name', '.profile__about');
@@ -53,6 +64,16 @@ function handlePlaceSubmit(data) {
 
 // Объявляем коллбек сабмита формы редактирования профиля:
 function handleProfileSubmit(data) {
+
+
+  api.editUserData(data)
+    .then(userData => {
+      console.log('NewUserData: ', userData);
+      })
+    .catch(err => console.log('Change User Fata Error: ', err));
+
+
+
   currentUser.setUserInfo(data);
   this.close();
 }
@@ -137,13 +158,35 @@ buttonAddPlace.addEventListener('click', () => {
 // ------------------------------------------------------------------
 // Общий функционал:
 
-// Создаем массив начальных карточек из входного массива данных:
-const initialCardElements = initialCards.map(data => {
-  return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
-});
+// Получаем данные о пользователе с сервера:
+api.getUserData()
+  .then(userData => {
+    console.log('UserData: ', userData);
+    currentUser.setUserInfo({username: userData.name, userjob: userData.about});
+    profileAvatar.src = userData.avatar;
+    })
+  .catch(err => console.log('Get User Fata Error: ', err));
 
 // Создаем экземпляр класса Section для рендера карточек:
 const cardsSection = new Section(renderer, containerSelector);
 
+// Получаем начальные карточки с сервера:
+api.getInitialCards()
+  .then(initialCardsData => {
+    console.log('InitialCardsData: ', initialCardsData);
+    const initialCardElements = initialCardsData.map(data => {
+      return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
+    });
+
+    cardsSection.drawInitial(initialCardElements);
+  })
+  .catch(err => console.log('Get Initial Cards Error: ', err));
+
+// Создаем массив начальных карточек из входного массива данных:
+// const initialCardElements = initialCards.map(data => {
+//   return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
+// });
+
+
 // Вставляем начальные карточки из массива:
-cardsSection.drawInitial(initialCardElements);
+//cardsSection.drawInitial(initialCardElements);

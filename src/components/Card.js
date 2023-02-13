@@ -2,11 +2,12 @@ export class Card {
   constructor(placeData, templateSelector, handleCardClick, handleCardDeleteConfirm) {
     this.name = placeData.name;
     this.link = placeData.link;
+    this._likes = placeData.likes.length;
+    this._id = placeData._id;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
     //console.log(handleCardDeleteConfirm);
     this._handleCardDeleteConfirm = handleCardDeleteConfirm;
-    this._id = 'временная заглушка';
   }
 
   _getCardTemplate() {
@@ -18,6 +19,8 @@ export class Card {
     this._cardImg = this._card.querySelector('.card__image');
     this._cardTitle = this._card.querySelector('.card__title');
     this._like = this._card.querySelector('.card__like');
+    // устанавливаем количество лайков:
+    this._card.querySelector('.card__likes-count').textContent = this._likes ? this._likes : 0;
 
     if (this._templateSelector === '#cardTemplate') {
       this._cardDeleteBtn = this._card.querySelector('.card__delete');
@@ -47,8 +50,8 @@ export class Card {
 
   _deleteCard() {
     this._handleCardDeleteConfirm(this._id);
-    // this._card.remove();
-    // this._card = null;
+    this._card.remove();
+    this._card = null;
     // this._element = null;
   }
 

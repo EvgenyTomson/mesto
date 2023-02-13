@@ -10,7 +10,7 @@ export const validationParametres = {
 export const apiOptions = {
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-60',
   headers: {
-    authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6', //поменять на свой
+    authorization: '14bcc1cd-5619-4964-8098-6c46ced3ee82', //поменять на свой
     'Content-Type': 'application/json'
   }
 };
@@ -39,6 +39,7 @@ export const profileEdit = document.querySelector('.profile__edit');
 // Получаем данные текущего профиля:
 export const profileName = document.querySelector('.profile__name');
 export const profileJob = document.querySelector('.profile__about');
+export const profileAvatar = document.querySelector('.profile__avatar');
 
 // Получаем попап редактирования профиля и его элементы:
 export const popupProfile = document.querySelector('#profileEditPopup');
