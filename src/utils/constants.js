@@ -6,8 +6,19 @@ export const validationParametres = {
   errorClass: 'popup__error_visible'
 };
 
+// данные для API:
+export const apiOptions = {
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-60',
+  headers: {
+    authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6', //поменять на свой
+    'Content-Type': 'application/json'
+  }
+};
+
 // Селектор для выбора шаблона карточки:
 export const templateSelector = '#cardTemplate';
+// Селектор для выбора шаблона чужой карточки:
+export const foreignTemplateSelector = '#foreignCardTemplate';
 
 // Селектор для выбора контейнера карточек:
 export const containerSelector = '.elements__cards';
@@ -19,6 +30,8 @@ export const closeButtonSelector = '.popup__close';
 export const profilePopupSelector = '#profileEditPopup';
 export const placePopupSelector = '#newPlacePopup';
 export const imagePopupSelector = '#viewImagePopup';
+export const avatarPopupSelector = '#editAvatarPopup';
+export const deleteCardPopupSelectoor = '#deleteOwnCardPopup';
 
 
 // Получаем кнопку редактирования профиля:
@@ -39,3 +52,7 @@ export const buttonAddPlace = document.querySelector('.profile__add-place');
 // Получаем попап добавления нового места и его элементы:
 export const newPlacePopup = document.querySelector('#newPlacePopup');
 export const newPlaceForm = newPlacePopup.querySelector('.popup__form');
+
+// Получаем попап добавления нового места и его элементы:
+export const avatarPopup = document.querySelector(avatarPopupSelector);
+export const avatarForm = avatarPopup.querySelector('.popup__form');

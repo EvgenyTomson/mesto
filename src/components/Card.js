@@ -1,9 +1,12 @@
 export class Card {
-  constructor(placeData, templateSelector, handleCardClick) {
+  constructor(placeData, templateSelector, handleCardClick, handleCardDeleteConfirm) {
     this.name = placeData.name;
     this.link = placeData.link;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
+    //console.log(handleCardDeleteConfirm);
+    this._handleCardDeleteConfirm = handleCardDeleteConfirm;
+    this._id = 'временная заглушка';
   }
 
   _getCardTemplate() {
@@ -15,7 +18,10 @@ export class Card {
     this._cardImg = this._card.querySelector('.card__image');
     this._cardTitle = this._card.querySelector('.card__title');
     this._like = this._card.querySelector('.card__like');
-    this._cardDeleteBtn = this._card.querySelector('.card__delete');
+
+    if (this._templateSelector === '#cardTemplate') {
+      this._cardDeleteBtn = this._card.querySelector('.card__delete');
+    }
 
     this._fillCard();
     this._setCardListeners();
@@ -30,7 +36,9 @@ export class Card {
 
   _setCardListeners() {
     // удаление карточки
-    this._cardDeleteBtn.addEventListener('click', () => this._deleteCard());
+    if (this._templateSelector === '#cardTemplate') {
+      this._cardDeleteBtn.addEventListener('click', () => this._deleteCard());
+    }
     // лайк карточки
     this._like.addEventListener('click', () => this._likeCard());
     // показ попапа с картинкой
@@ -38,8 +46,10 @@ export class Card {
   }
 
   _deleteCard() {
-    this._card.remove();
-    this._element = null;
+    this._handleCardDeleteConfirm(this._id);
+    // this._card.remove();
+    // this._card = null;
+    // this._element = null;
   }
 
   _likeCard() {
