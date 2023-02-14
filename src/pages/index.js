@@ -194,7 +194,7 @@ function renderer(renderedItem, container) {
 // const avatar = document.querySelector('.profile__avatar-wrapper');
 const avatar = document.querySelector('.profile__avatar-button');
 avatar.addEventListener('click', () => {
-  console.log('click: ', avatar);
+  //console.log('click: ', avatar);
 
   avatarFormValidator.resetValidation();
   avatarPopup.open();
@@ -223,8 +223,11 @@ buttonAddPlace.addEventListener('click', () => {
 // ------------------------------------------------------------------
 // Общий функционал:
 
+// Создаем экземпляр класса Section для рендера карточек:
+const cardsSection = new Section(renderer, containerSelector);
+
 // Получаем данные о пользователе с сервера:
-api.getUserData()
+const userDataPromise = api.getUserData()
   .then(userData => {
     //console.log('UserData: ', userData);
     currentUser.setUserInfo({username: userData.name, userjob: userData.about});
@@ -233,16 +236,31 @@ api.getUserData()
     })
   .catch(err => console.log('Get User Fata Error: ', err));
 
-// Создаем экземпляр класса Section для рендера карточек:
-const cardsSection = new Section(renderer, containerSelector);
+  // .finally(() => {
+  //   api.getInitialCards()
+  //   .then(initialCardsData => {
+  //     // console.log('InitialCardsData: ', initialCardsData);
+  //     const initialCardElements = initialCardsData.map(data => {
+  //       // return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
+  //       const isOwner = data.owner._id === currentUser.id;
+  //       const isLiked = data.likes.some(like => like._id === currentUser.id);
+  //       return createCard(data, handleImageClick, handleDeletePopupOpen, isOwner, isLiked, handleLikeClick)
+  //     });
+
+  //     cardsSection.drawInitial(initialCardElements);
+  //   })
+  //   .catch(err => console.log('Get Initial Cards Error: ', err));
+  // })
+
 
 // Получаем начальные карточки с сервера:
-setTimeout(() => {
-  api.getInitialCards()
+Promise.all([userDataPromise])
+  .then(() => {
+    api.getInitialCards()
     .then(initialCardsData => {
+      //console.log(initialCardsData);
       // console.log('InitialCardsData: ', initialCardsData);
       const initialCardElements = initialCardsData.map(data => {
-        // return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
         const isOwner = data.owner._id === currentUser.id;
         const isLiked = data.likes.some(like => like._id === currentUser.id);
         return createCard(data, handleImageClick, handleDeletePopupOpen, isOwner, isLiked, handleLikeClick)
@@ -251,25 +269,21 @@ setTimeout(() => {
       cardsSection.drawInitial(initialCardElements);
     })
     .catch(err => console.log('Get Initial Cards Error: ', err));
-}, 500);
+  })
+
+// setTimeout(() => {
 // api.getInitialCards()
-//   .then(initialCardsData => {
-//     console.log('InitialCardsData: ', initialCardsData);
-//     const initialCardElements = initialCardsData.map(data => {
-//       // return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
-//       const isOwner = data.owner._id === currentUser.id;
-//       return createCard(data, handleImageClick, handleDeletePopupOpen, isOwner)
-//     });
+//     .then(initialCardsData => {
+//       console.log(initialCardsData);
+//       // console.log('InitialCardsData: ', initialCardsData);
+//       const initialCardElements = initialCardsData.map(data => {
+//         const isOwner = data.owner._id === currentUser.id;
+//         const isLiked = data.likes.some(like => like._id === currentUser.id);
+//         return createCard(data, handleImageClick, handleDeletePopupOpen, isOwner, isLiked, handleLikeClick)
+//       });
 
-//     cardsSection.drawInitial(initialCardElements);
-//   })
-//   .catch(err => console.log('Get Initial Cards Error: ', err));
+//       cardsSection.drawInitial(initialCardElements);
+//     })
+//     .catch(err => console.log('Get Initial Cards Error: ', err));
 
-// Создаем массив начальных карточек из входного массива данных:
-// const initialCardElements = initialCards.map(data => {
-//   return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
-// });
-
-
-// Вставляем начальные карточки из массива:
-//cardsSection.drawInitial(initialCardElements);
+// }, 500);
