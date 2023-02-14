@@ -1,15 +1,12 @@
 export class Card {
-  //constructor(placeData, templateSelector, handleCardClick, handleCardDeleteConfirm) {
   constructor(placeData, templateSelector, handleCardClick, handleCardDeleteConfirm, isOwn, isLiked, handleLikeClick) {
     this.name = placeData.name;
     this.link = placeData.link;
     this._likes = placeData.likes.length;
-    //console.log(isLiked);
-    this._isLiked = isLiked;//placeData.likes.some(like => like._id === )
+    this._isLiked = isLiked;
     this._id = placeData._id;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
-    //console.log(handleCardDeleteConfirm);
     this._handleCardDeleteConfirm = handleCardDeleteConfirm;
     this.isOwn = isOwn;
     this._handleLikeClick = handleLikeClick;
@@ -29,9 +26,6 @@ export class Card {
     this._likesCounter = this._card.querySelector('.card__likes-count');
     this._likesCounter.textContent = this._likes;
 
-    // if (this._templateSelector === '#cardTemplate') {
-    //   this._cardDeleteBtn = this._card.querySelector('.card__delete');
-    // }
     if (this.isOwn) {
       this._cardDeleteBtn = this._card.querySelector('.card__delete');
     }
@@ -49,9 +43,6 @@ export class Card {
 
   _setCardListeners() {
     // удаление карточки
-    // if (this._templateSelector === '#cardTemplate') {
-    //   this._cardDeleteBtn.addEventListener('click', () => this._deleteCard());
-    // }
     if (this.isOwn) {
       this._cardDeleteBtn.addEventListener('click', () => this._deleteCard());
     }
