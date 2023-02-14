@@ -23,9 +23,16 @@ const api = new Api(apiOptions);
 // Создаем экземпляр класса UserInfo:
 const currentUser = new UserInfo('.profile__name', '.profile__about');
 
+// Функция показа лоадера:
+function renderLoading(submitButton, submitButtonText) {
+  submitButton.textContent = submitButtonText;
+}
+
 // Объявляем функцию сабмита формы подтверждения удаления карточки:
-function handleCardDeleteSubmit(cardId, cardToDelete) {
-  //console.log('Card Delete: ', cardId);
+function handleCardDeleteSubmit(cardId, cardToDelete, submitButton) {
+  const submitButtonOriginalText = submitButton.textContent;
+  renderLoading(submitButton, 'Сохранение...');
+
   api.deleteCard(cardId)
     .then(res => {
       //console.log(`deleteCard. ID: ${cardId}: `, res);
@@ -35,7 +42,9 @@ function handleCardDeleteSubmit(cardId, cardToDelete) {
         cardToDelete.remove()
         : Promise.reject(`addNewCard Ошибка: ${res.status}`)
     })
-    .catch(err => console.log('Card Delete Error: ', err));
+    .catch(err => console.log('Card Delete Error: ', err))
+
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
 
   //cardToDelete.remove();
   this.close();
@@ -86,35 +95,47 @@ function handleImageClick(name, link) {
 }
 
 // Объявляем коллбек сабмита формы добавления карточки:
-function handlePlaceSubmit(data) {
+function handlePlaceSubmit(data, submitButton) {
   const placeData = {name: data.placename, link: data.placelink};
+
+  const submitButtonOriginalText = submitButton.textContent;
+  renderLoading(submitButton, 'Сохранение...');
+
   api.addNewCard(placeData)
     .then(newCardData => {
-      console.log('newCardData: ', newCardData);
+      //console.log('newCardData: ', newCardData);
       // cardsSection.addItem(createCard(newCardData, templateSelector, handleImageClick, handleDeletePopupOpen));
       cardsSection.addItem(createCard(newCardData, handleImageClick, handleDeletePopupOpen, true, false, handleLikeClick));
     })
     .catch(err => console.log('Add New Card Error: ', err))
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
 
   // cardsSection.addItem(createCard(placeData, templateSelector, handleImageClick, handleDeletePopupOpen));
   this.close();
 }
 
 // Объявляем коллбек сабмита формы редактирования профиля:
-function handleProfileSubmit(data) {
-  api.editUserData(data)
-    // .then(userData => {
-    //   console.log('NewUserData: ', userData);
-    //   })
-    .catch(err => console.log('Change User Fata Error: ', err));
+function handleProfileSubmit(data, submitButton) {
+  const submitButtonOriginalText = submitButton.textContent;
+  renderLoading(submitButton, 'Сохранение...');
 
-  currentUser.setUserInfo(data);
+  api.editUserData(data)
+    .then(userData => {
+      //console.log('NewUserData: ', userData);
+      currentUser.setUserInfo({username: userData.name, userjob: userData.about});
+      })
+    .catch(err => console.log('Change User Fata Error: ', err))
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
+
+  // currentUser.setUserInfo(data);
   this.close();
 }
 
 // Объявляем функцию сабмита формы изменения аватара:
-function handleAvatarSubmit({avatar}) {
-  console.log('Avatar submit', avatar);
+function handleAvatarSubmit({avatar}, submitButton) {
+  //console.log('Avatar submit', avatar);
+  const submitButtonOriginalText = submitButton.textContent;
+  renderLoading(submitButton, 'Сохранение...');
 
   api.editUserAvatar(avatar)
     .then(res => {
@@ -123,6 +144,7 @@ function handleAvatarSubmit({avatar}) {
       profileAvatar.src = res.avatar;
       })
     .catch(err => console.log('Edit User Avatar Error: ', err))
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
 
   this.close();
 }
@@ -218,7 +240,7 @@ const cardsSection = new Section(renderer, containerSelector);
 setTimeout(() => {
   api.getInitialCards()
     .then(initialCardsData => {
-      //console.log('InitialCardsData: ', initialCardsData);
+      // console.log('InitialCardsData: ', initialCardsData);
       const initialCardElements = initialCardsData.map(data => {
         // return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
         const isOwner = data.owner._id === currentUser.id;

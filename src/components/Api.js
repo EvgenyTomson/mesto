@@ -105,7 +105,7 @@ export class Api {
         })
       })
         .then(res => {
-          console.log('editUserAvatar: ', res);
+          //console.log('editUserAvatar: ', res);
           return res.ok ? res.json() : Promise.reject(`editUserAvatar Ошибка: ${res.status}`)
         })
   }

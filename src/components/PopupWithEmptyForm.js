@@ -17,7 +17,8 @@ export class PopupWithEmptyForm extends Popup {
     super.setEventListeners();
     this._form.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      this._formSubmitHandler(this._cardId, this._cardToDelete);
+      // this._formSubmitHandler(this._cardId, this._cardToDelete);
+      this._formSubmitHandler(this._cardId, this._cardToDelete, this._form.querySelector('.popup__submit'));
     });
   }
 }
