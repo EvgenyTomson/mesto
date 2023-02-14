@@ -7,16 +7,17 @@ export class PopupWithEmptyForm extends Popup {
     this._formSubmitHandler = formSubmitHandler;
   }
 
-  open(cardId) {
+  open(cardId, cardToDelete) {
     super.open();
     this._cardId = cardId;
+    this._cardToDelete = cardToDelete;
   }
 
   setEventListeners() {
     super.setEventListeners();
     this._form.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      this._formSubmitHandler(this._cardId);
+      this._formSubmitHandler(this._cardId, this._cardToDelete);
     });
   }
 }

@@ -16,39 +16,69 @@ import './index.css';
 
 // ------------------------------------------------------------------
 
-//let initialCards = [];
-//let initialCardElements;
-
 // Создаем экземпляр класса Api:
 const api = new Api(apiOptions);
-// api.getInitialCards()
-//   .then(initialCardsData => {
-//     console.log('InitialCardsData: ', initialCardsData);
-//   })
-//   .catch(err => console.log('Get Initial Cards Error: ', err));
 
-//console.log('initialCardElements: ', initialCardElements);
 
 // Создаем экземпляр класса UserInfo:
 const currentUser = new UserInfo('.profile__name', '.profile__about');
 
 // Объявляем функцию сабмита формы подтверждения удаления карточки:
-function handleCardDeleteSubmit(cardId) {
-  console.log('Card Delete: ', cardId);
+function handleCardDeleteSubmit(cardId, cardToDelete) {
+  //console.log('Card Delete: ', cardId);
+  api.deleteCard(cardId)
+    .then(res => {
+      //console.log(`deleteCard. ID: ${cardId}: `, res);
+      // if(res.ok) console.log('Card Delete OK')
+      res.ok ?
+        //console.log('Card Delete OK')
+        cardToDelete.remove()
+        : Promise.reject(`addNewCard Ошибка: ${res.status}`)
+    })
+    .catch(err => console.log('Card Delete Error: ', err));
+
+  //cardToDelete.remove();
   this.close();
 }
 
 // Объявляем функцию открытия попапа удаления карточки:
-function handleDeletePopupOpen(cardId) {
-  console.log('handleDeletePopupOpen: ', cardId);
-  cardDeletePopup.open(cardId);
+function handleDeletePopupOpen(cardId, cardToDelete) {
+  //console.log('handleDeletePopupOpen: ', cardId);
+  cardDeletePopup.open(cardId, cardToDelete);
+}
+
+// Коллбек постаковки/снятия лайка:
+function handleLikeClick(cardId, isLiked, cardObject) {
+  //console.log('handleLikeClick: ', cardId);
+  if(isLiked) {
+    api.removeLike(cardId)
+      .then(updatedCardData => {
+        //console.log('updatedCardData: ', updatedCardData);
+        cardObject.updateLikesCount(updatedCardData.likes.length);
+      })
+      .catch(err => console.log('Remove Card Like Error: ', err))
+  }else {
+    api.addLike(cardId)
+    .then(updatedCardData => {
+      //console.log('updatedCardData: ', updatedCardData);
+      cardObject.updateLikesCount(updatedCardData.likes.length);
+    })
+    .catch(err => console.log('Add Card Like Error: ', err))
+  }
 }
 
 // Функция создания элемента карточки:
-const createCard = (cardData, templateSelector, handleCardClick, handleCardDeleteConfirm) => {
-  const card = new Card(cardData, templateSelector, handleCardClick, handleCardDeleteConfirm);
+const createCard = (cardData, handleCardClick, handleCardDeleteConfirm, isOwner, isLiked) => {
+  let card;
+  isOwner ? card = new Card(cardData, templateSelector, handleCardClick, handleCardDeleteConfirm, isOwner, isLiked, handleLikeClick)
+    : card = new Card(cardData, foreignTemplateSelector, handleCardClick, handleCardDeleteConfirm, isOwner, isLiked, handleLikeClick)
+  //const card = new Card(cardData, templateSelector, handleCardClick, handleCardDeleteConfirm);
   return card.create();
 }
+// const createCard = (cardData, templateSelector, handleCardClick, handleCardDeleteConfirm) => {
+//   const card = new Card(cardData, templateSelector, handleCardClick, handleCardDeleteConfirm);
+//   return card.create();
+// }
 
 // Объявляем коллбек для открытия попапа с картинкой:
 function handleImageClick(name, link) {
@@ -58,21 +88,25 @@ function handleImageClick(name, link) {
 // Объявляем коллбек сабмита формы добавления карточки:
 function handlePlaceSubmit(data) {
   const placeData = {name: data.placename, link: data.placelink};
-  cardsSection.addItem(createCard(placeData, templateSelector, handleImageClick, handleDeletePopupOpen));
+  api.addNewCard(placeData)
+    .then(newCardData => {
+      console.log('newCardData: ', newCardData);
+      // cardsSection.addItem(createCard(newCardData, templateSelector, handleImageClick, handleDeletePopupOpen));
+      cardsSection.addItem(createCard(newCardData, handleImageClick, handleDeletePopupOpen, true, false, handleLikeClick));
+    })
+    .catch(err => console.log('Add New Card Error: ', err))
+
+  // cardsSection.addItem(createCard(placeData, templateSelector, handleImageClick, handleDeletePopupOpen));
   this.close();
 }
 
 // Объявляем коллбек сабмита формы редактирования профиля:
 function handleProfileSubmit(data) {
-
-
   api.editUserData(data)
-    .then(userData => {
-      console.log('NewUserData: ', userData);
-      })
+    // .then(userData => {
+    //   console.log('NewUserData: ', userData);
+    //   })
     .catch(err => console.log('Change User Fata Error: ', err));
-
-
 
   currentUser.setUserInfo(data);
   this.close();
@@ -81,6 +115,15 @@ function handleProfileSubmit(data) {
 // Объявляем функцию сабмита формы изменения аватара:
 function handleAvatarSubmit({avatar}) {
   console.log('Avatar submit', avatar);
+
+  api.editUserAvatar(avatar)
+    .then(res => {
+      //console.log('editUserAvatar: ', res);
+      // if(res.ok) console.log('Edit User Avatar OK')
+      profileAvatar.src = res.avatar;
+      })
+    .catch(err => console.log('Edit User Avatar Error: ', err))
+
   this.close();
 }
 
@@ -161,9 +204,10 @@ buttonAddPlace.addEventListener('click', () => {
 // Получаем данные о пользователе с сервера:
 api.getUserData()
   .then(userData => {
-    console.log('UserData: ', userData);
+    //console.log('UserData: ', userData);
     currentUser.setUserInfo({username: userData.name, userjob: userData.about});
     profileAvatar.src = userData.avatar;
+    currentUser.id = userData._id;
     })
   .catch(err => console.log('Get User Fata Error: ', err));
 
@@ -171,16 +215,33 @@ api.getUserData()
 const cardsSection = new Section(renderer, containerSelector);
 
 // Получаем начальные карточки с сервера:
-api.getInitialCards()
-  .then(initialCardsData => {
-    console.log('InitialCardsData: ', initialCardsData);
-    const initialCardElements = initialCardsData.map(data => {
-      return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
-    });
+setTimeout(() => {
+  api.getInitialCards()
+    .then(initialCardsData => {
+      //console.log('InitialCardsData: ', initialCardsData);
+      const initialCardElements = initialCardsData.map(data => {
+        // return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
+        const isOwner = data.owner._id === currentUser.id;
+        const isLiked = data.likes.some(like => like._id === currentUser.id);
+        return createCard(data, handleImageClick, handleDeletePopupOpen, isOwner, isLiked, handleLikeClick)
+      });
 
-    cardsSection.drawInitial(initialCardElements);
-  })
-  .catch(err => console.log('Get Initial Cards Error: ', err));
+      cardsSection.drawInitial(initialCardElements);
+    })
+    .catch(err => console.log('Get Initial Cards Error: ', err));
+}, 500);
+// api.getInitialCards()
+//   .then(initialCardsData => {
+//     console.log('InitialCardsData: ', initialCardsData);
+//     const initialCardElements = initialCardsData.map(data => {
+//       // return createCard(data, foreignTemplateSelector, handleImageClick, handleDeletePopupOpen)
+//       const isOwner = data.owner._id === currentUser.id;
+//       return createCard(data, handleImageClick, handleDeletePopupOpen, isOwner)
+//     });
+
+//     cardsSection.drawInitial(initialCardElements);
+//   })
+//   .catch(err => console.log('Get Initial Cards Error: ', err));
 
 // Создаем массив начальных карточек из входного массива данных:
 // const initialCardElements = initialCards.map(data => {
