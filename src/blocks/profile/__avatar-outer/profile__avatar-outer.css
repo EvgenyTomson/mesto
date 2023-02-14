@@ -1,7 +1,4 @@
 .profile__avatar-outer:hover .profile__avatar-button::before  {
   display: flex;
 }
-/*
-.profile__avatar-outer:hover .profile__avatar-wrapper::before {
-  display: flex;
-} */
+

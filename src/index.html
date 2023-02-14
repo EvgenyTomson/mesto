@@ -16,17 +16,10 @@
     <section class="profile">
       <div class="profile__current">
         <div class="profile__avatar-outer">
-          <!-- <div class="profile__avatar-wrapper"> -->
           <button class="profile__avatar-button" type="button" aria-label="Изменить аватар">
             <img src="<%=require('./img/avatar.png')%>" alt=" Аватар пользователя." class="profile__avatar">
-          <!-- </div> -->
           </button>
         </div>
-
-        <!-- <button class="profile__avatar-button">
-          <img src="<%=require('./img/avatar.png')%>" alt=" Аватар пользователя." class="profile__avatar">
-        </button> -->
-
         <div class="profile__info">
           <div class="profile__title">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -101,8 +94,6 @@
     </div>
   </div>
 
-<!-- ------------------------------------------------------------------------------- -->
-
   <!-- Popup Delete Own Card -->
   <div class="popup popup_type_small" id="deleteOwnCardPopup">
     <div class="popup__container popup__container_type_small">
@@ -113,7 +104,6 @@
       </form>
     </div>
   </div>
-
 
   <!-- Popup Edit Avatar -->
   <div class="popup" id="editAvatarPopup">
@@ -131,8 +121,6 @@
     </div>
   </div>
 
-<!-- ------------------------------------------------------------------------------- -->
-
   <!-- Шаблон своей карточки -->
   <template id="cardTemplate">
     <li class="card">
@@ -148,12 +136,9 @@
     </li>
   </template>
 
-<!-- ------------------------------------------------------------------------------- -->
-
   <!-- Шаблон чужой карточки -->
   <template id="foreignCardTemplate">
     <li class="card">
-      <!-- <button class="card__delete" type="button" aria-label="Удалить карточку"></button> -->
       <img src="#" alt="" class="card__image">
       <div class="card__description">
         <h2 class="card__title"></h2>
@@ -165,6 +150,5 @@
     </li>
   </template>
 
-  <!-- Скрипты -->
 </body>
 </html>
