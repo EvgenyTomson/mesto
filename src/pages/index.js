@@ -1,7 +1,8 @@
-import { validationParametres, templateSelector, foreignTemplateSelector, containerSelector, closeButtonSelector,
+import { validationParametres, templateSelectors, containerSelector, closeButtonSelector,
         profilePopupSelector, placePopupSelector, imagePopupSelector, avatarPopupSelector, deleteCardPopupSelectoor,
         profileEdit, profileForm, inputName, inputJob, buttonAddPlace, newPlaceForm, avatarForm, apiOptions,
         profileAvatar } from '../utils/constants.js';
+import { renderLoading } from '../utils/utils.js';
 import { Card } from '../components/Card.js';
 import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
@@ -21,26 +22,18 @@ const api = new Api(apiOptions);
 // Создаем экземпляр класса UserInfo:
 const currentUser = new UserInfo('.profile__name', '.profile__about');
 
-// Функция показа лоадера:
-function renderLoading(submitButton, submitButtonText) {
-  submitButton.textContent = submitButtonText;
-}
-
 // Объявляем функцию сабмита формы подтверждения удаления карточки:
 function handleCardDeleteSubmit(cardId, cardToDelete, submitButton) {
   const submitButtonOriginalText = submitButton.textContent;
   renderLoading(submitButton, 'Сохранение...');
 
   api.deleteCard(cardId)
-    .then(res => {
-      res.ok ?
+    .then(() => {
         cardToDelete.remove()
-        : Promise.reject(`addNewCard Ошибка: ${res.status}`)
+        this.close();
     })
     .catch(err => console.log('Card Delete Error: ', err))
     .finally(() => renderLoading(submitButton, submitButtonOriginalText));
-
-  this.close();
 }
 
 // Объявляем функцию открытия попапа удаления карточки:
@@ -66,10 +59,8 @@ function handleLikeClick(cardId, isLiked, cardObject) {
 }
 
 // Функция создания элемента карточки:
-const createCard = (cardData, handleCardClick, handleCardDeleteConfirm, isOwner, isLiked) => {
-  let card;
-  isOwner ? card = new Card(cardData, templateSelector, handleCardClick, handleCardDeleteConfirm, isOwner, isLiked, handleLikeClick)
-    : card = new Card(cardData, foreignTemplateSelector, handleCardClick, handleCardDeleteConfirm, isOwner, isLiked, handleLikeClick)
+const createCard = (cardData, handleCardClick, handleCardDeleteConfirm, currentUser) => {
+  const card = new Card(cardData, templateSelectors, handleCardClick, handleCardDeleteConfirm, currentUser, handleLikeClick)
   return card.create();
 }
 
@@ -86,12 +77,11 @@ function handlePlaceSubmit(data, submitButton) {
 
   api.addNewCard(placeData)
     .then(newCardData => {
-      cardsSection.addItem(createCard(newCardData, handleImageClick, handleDeletePopupOpen, true, false, handleLikeClick));
+      cardsSection.addItem(createCard(newCardData, handleImageClick, handleDeletePopupOpen, currentUser.id));
+      this.close();
     })
     .catch(err => console.log('Add New Card Error: ', err))
     .finally(() => renderLoading(submitButton, submitButtonOriginalText));
-
-  this.close();
 }
 
 // Объявляем коллбек сабмита формы редактирования профиля:
@@ -102,11 +92,10 @@ function handleProfileSubmit(data, submitButton) {
   api.editUserData(data)
     .then(userData => {
       currentUser.setUserInfo({username: userData.name, userjob: userData.about});
-      })
+      this.close();
+    })
     .catch(err => console.log('Change User Data Error: ', err))
     .finally(() => renderLoading(submitButton, submitButtonOriginalText));
-
-  this.close();
 }
 
 // Объявляем функцию сабмита формы изменения аватара:
@@ -117,11 +106,10 @@ function handleAvatarSubmit({avatar}, submitButton) {
   api.editUserAvatar(avatar)
     .then(res => {
         profileAvatar.src = res.avatar;
+        this.close();
       })
     .catch(err => console.log('Edit User Avatar Error: ', err))
     .finally(() => renderLoading(submitButton, submitButtonOriginalText));
-
-  this.close();
 }
 
 // Создаем экземпляры класса PopupWithForm:
@@ -190,27 +178,21 @@ buttonAddPlace.addEventListener('click', () => {
 // Создаем экземпляр класса Section для рендера карточек:
 const cardsSection = new Section(renderer, containerSelector);
 
-// Получаем данные о пользователе с сервера:
-const userDataPromise = api.getUserData()
-  .then(userData => {
+// Получаем начальные карточки с сервера только после того, как получены данные пользователя:
+Promise.all([api.getUserData(), api.getInitialCards()])
+  .then(responses => {
+    const userData = responses[0];
+    const initialCardsData = responses[1];
+
     currentUser.setUserInfo({username: userData.name, userjob: userData.about});
     profileAvatar.src = userData.avatar;
     currentUser.id = userData._id;
-    })
-  .catch(err => console.log('Get User Data Error: ', err));
 
-// Получаем начальные карточки с сервера только после того, как получены данные пользователя:
-Promise.all([userDataPromise])
-  .then(() => {
-    api.getInitialCards()
-    .then(initialCardsData => {
-      const initialCardElements = initialCardsData.map(data => {
-        const isOwner = data.owner._id === currentUser.id;
-        const isLiked = data.likes.some(like => like._id === currentUser.id);
-        return createCard(data, handleImageClick, handleDeletePopupOpen, isOwner, isLiked, handleLikeClick)
-      });
-
-      cardsSection.drawInitial(initialCardElements);
+    const initialCardElements = initialCardsData.map(data => {
+      return createCard(data, handleImageClick, handleDeletePopupOpen, currentUser.id)
     })
-    .catch(err => console.log('Get Initial Cards Error: ', err));
-  });
+
+    cardsSection.renderItems(initialCardElements);
+  })
+  .catch(err => console.log(err));
+

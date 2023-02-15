@@ -4,6 +4,11 @@ export class Api {
     this._headers = options.headers;
   }
 
+  // Проверяем статус ответа сервера:
+  _checkResponseStatus(response, method) {
+    return response.ok ? response.json() : Promise.reject(`Ошибка в ${method}: ${response.status}`)
+  }
+
   // загрузка карточек с сервера:
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
@@ -11,7 +16,7 @@ export class Api {
         headers: this._headers,
       })
         .then(res => {
-          return res.ok ? res.json() : Promise.reject(`getInitialCards Ошибка: ${res.status}`)
+          return this._checkResponseStatus(res, 'getInitialCards')
         })
   }
 
@@ -22,7 +27,7 @@ export class Api {
         headers: this._headers,
       })
         .then(res => {
-          return res.ok ? res.json() : Promise.reject(`getUserData Ошибка: ${res.status}`)
+          return this._checkResponseStatus(res, 'getUserData')
         })
   }
 
@@ -37,7 +42,7 @@ export class Api {
         })
       })
         .then(res => {
-          return res.ok ? res.json() : Promise.reject(`editUserData Ошибка: ${res.status}`)
+          return this._checkResponseStatus(res, 'editUserData')
         })
   }
 
@@ -49,7 +54,7 @@ export class Api {
         body: JSON.stringify(cardData)
       })
         .then(res => {
-          return res.ok ? res.json() : Promise.reject(`addNewCard Ошибка: ${res.status}`)
+          return this._checkResponseStatus(res, 'addNewCard')
         })
   }
 
@@ -59,6 +64,9 @@ export class Api {
         method: 'DELETE',
         headers: this._headers,
       })
+        .then(res => {
+          return this._checkResponseStatus(res, 'deleteCard')
+        })
   }
 
   // Постановка и снятие лайка:
@@ -68,7 +76,7 @@ export class Api {
         headers: this._headers,
       })
         .then(res => {
-          return res.ok ? res.json() : Promise.reject(`addLike Ошибка: ${res.status}`)
+          return this._checkResponseStatus(res, 'addLike')
         })
   }
 
@@ -78,7 +86,7 @@ export class Api {
         headers: this._headers,
       })
         .then(res => {
-          return res.ok ? res.json() : Promise.reject(`removeLike Ошибка: ${res.status}`)
+          return this._checkResponseStatus(res, 'removeLike')
         })
   }
 
@@ -92,7 +100,7 @@ export class Api {
         })
       })
         .then(res => {
-          return res.ok ? res.json() : Promise.reject(`editUserAvatar Ошибка: ${res.status}`)
+          return this._checkResponseStatus(res, 'editUserAvatar')
         })
   }
 }

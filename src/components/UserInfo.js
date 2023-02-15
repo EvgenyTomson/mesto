@@ -9,7 +9,7 @@ export class UserInfo {
   }
 
   setUserInfo({username, userjob}) {
-    this._user.textContent = username;
-    this._info.textContent = userjob;
+    if (username) this._user.textContent = username;
+    if (userjob) this._info.textContent = userjob;
   }
 }

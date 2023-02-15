@@ -1,14 +1,15 @@
 export class Card {
-  constructor(placeData, templateSelector, handleCardClick, handleCardDeleteConfirm, isOwn, isLiked, handleLikeClick) {
+  constructor(placeData, templateSelectors, handleCardClick, handleCardDeleteConfirm, currentUserId, handleLikeClick) {
     this.name = placeData.name;
     this.link = placeData.link;
+    this._likesArray = placeData.likes;
     this._likes = placeData.likes.length;
-    this._isLiked = isLiked;
     this._id = placeData._id;
-    this._templateSelector = templateSelector;
+    this._templateSelectors = templateSelectors;
     this._handleCardClick = handleCardClick;
     this._handleCardDeleteConfirm = handleCardDeleteConfirm;
-    this.isOwn = isOwn;
+    this._ownerId = placeData.owner._id;
+    this._currentUserId = currentUserId;
     this._handleLikeClick = handleLikeClick;
   }
 
@@ -17,6 +18,10 @@ export class Card {
   }
 
   create() {
+    this._isLiked = this._likesArray.some(like => like._id === this._currentUserId);
+    this._isOwner = this._ownerId === this._currentUserId;
+    this._templateSelector = this._isOwner ? this._templateSelectors.owner : this._templateSelectors.foreign;
+
     this._card = this._getCardTemplate();
     this._cardImg = this._card.querySelector('.card__image');
     this._cardTitle = this._card.querySelector('.card__title');
@@ -26,7 +31,7 @@ export class Card {
     this._likesCounter = this._card.querySelector('.card__likes-count');
     this._likesCounter.textContent = this._likes;
 
-    if (this.isOwn) {
+    if (this._isOwner) {
       this._cardDeleteBtn = this._card.querySelector('.card__delete');
     }
 
@@ -43,7 +48,7 @@ export class Card {
 
   _setCardListeners() {
     // удаление карточки
-    if (this.isOwn) {
+    if (this._isOwner) {
       this._cardDeleteBtn.addEventListener('click', () => this._deleteCard());
     }
     // лайк карточки

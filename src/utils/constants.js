@@ -20,6 +20,8 @@ export const templateSelector = '#cardTemplate';
 // Селектор для выбора шаблона чужой карточки:
 export const foreignTemplateSelector = '#foreignCardTemplate';
 
+export const templateSelectors = { owner: templateSelector, foreign: foreignTemplateSelector};
+
 // Селектор для выбора контейнера карточек:
 export const containerSelector = '.elements__cards';
 
