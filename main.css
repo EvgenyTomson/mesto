@@ -7,7 +7,7 @@
 .profile__current{align-items:center;display:flex;gap:30px;justify-content:flex-start}@media screen and (max-width:760px){.profile__current{flex-direction:column;gap:26px;justify-content:center}}
 .profile__avatar-outer:hover .profile__avatar-button:before{display:flex}
 .profile__avatar-button{background-color:transparent;border:0;cursor:pointer;padding:0;position:relative}.profile__avatar-button:before{align-items:center;background-color:rgba(0,0,0,.8);bottom:0;content:url(ae1a976ddb506239e9f0.svg);display:none;justify-content:center;left:0;position:absolute;right:0;top:0}
-.profile__avatar{display:block;height:120px;-o-object-fit:cover;object-fit:cover;width:120px}
+.profile__avatar{border-radius:50%;display:block;height:120px;-o-object-fit:cover;object-fit:cover;width:120px}
 .profile__title{align-items:baseline;display:flex;gap:18px;justify-content:flex-start}@media screen and (max-width:760px){.profile__title{gap:10px;justify-content:center;transform:translateX(14px)}}
 .profile__info{max-width:336px}@media screen and (max-width:760px){.profile__info{align-items:center}}@media screen and (max-width:390px){.profile__info{max-width:280px}}
 .profile__name{color:#fff;font-size:42px;font-style:normal;font-weight:500;line-height:48px;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media screen and (max-width:490px){.profile__name{font-size:27px;line-height:33px;max-width:220px}}
