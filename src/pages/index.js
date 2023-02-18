@@ -70,12 +70,11 @@ function handleImageClick(name, link) {
 }
 
 // Объявляем коллбек сабмита формы добавления карточки:
-function handlePlaceSubmit(data, submitButton) {
-  const placeData = {name: data.placename, link: data.placelink};
+function handlePlaceSubmit(cardData, submitButton) {
   const submitButtonOriginalText = submitButton.textContent;
   renderLoading(submitButton, 'Сохранение...');
 
-  api.addNewCard(placeData)
+  api.addNewCard(cardData)
     .then(newCardData => {
       cardsSection.addItem(createCard(newCardData, handleImageClick, handleDeletePopupOpen, currentUser.id));
       this.close();
@@ -91,7 +90,7 @@ function handleProfileSubmit(data, submitButton) {
 
   api.editUserData(data)
     .then(userData => {
-      currentUser.setUserInfo({username: userData.name, userjob: userData.about});
+      currentUser.setUserInfo(userData);
       this.close();
     })
     .catch(err => console.log('Change User Data Error: ', err))
@@ -155,9 +154,9 @@ avatar.addEventListener('click', () => {
 
 // Открываем форму редактирования профиля:
 profileEdit.addEventListener('click', () => {
-  const {user, info } = currentUser.getUserInfo();
-  inputName.value = user;
-  inputJob.value = info;
+  const {name, about } = currentUser.getUserInfo();
+  inputName.value = name;
+  inputJob.value = about;
   // Используем публичный метод объекта валидации для очистки ошибок и переключения состояния кнопки.
   // Иначе, при первом запуске кнопка неактивна, при том, что поля заполнены корректно (т.к. они подтягиваются в JS):
   profileFormValidator.resetValidation();
@@ -184,7 +183,7 @@ Promise.all([api.getUserData(), api.getInitialCards()])
     const userData = responses[0];
     const initialCardsData = responses[1];
 
-    currentUser.setUserInfo({username: userData.name, userjob: userData.about});
+    currentUser.setUserInfo(userData);
     profileAvatar.src = userData.avatar;
     currentUser.id = userData._id;
 

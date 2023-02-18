@@ -49,7 +49,8 @@ module.exports = {
   },
   plugins: [  // добавляем массив плагинов
     new HtmlWebpackPlugin({
-      template: './src/index.html' // путь к файлу index.html
+      template: './src/index.html', // путь к файлу index.html
+      favicon: './src/favicon.ico'
     }),
     new CleanWebpackPlugin(), // плагин будет каждый раз при сборке проекта удалять содержимое папки dist
     new MiniCssExtractPlugin() // подключение плагина для объединения файлов

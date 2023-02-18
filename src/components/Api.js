@@ -32,14 +32,11 @@ export class Api {
   }
 
   // Редактирование профиля пользователя на сервере:
-  editUserData({username, userjob}) {
+  editUserData(userData) {
     return fetch(`${this._baseUrl}/users/me`, {
         method: 'PATCH',
         headers: this._headers,
-        body: JSON.stringify({
-          name: username,
-          about: userjob,
-        })
+        body: JSON.stringify(userData)
       })
         .then(res => {
           return this._checkResponseStatus(res, 'editUserData')
