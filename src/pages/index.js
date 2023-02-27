@@ -25,7 +25,7 @@ const currentUser = new UserInfo('.profile__name', '.profile__about');
 // Объявляем функцию сабмита формы подтверждения удаления карточки:
 function handleCardDeleteSubmit(cardId, cardToDelete, submitButton) {
   const submitButtonOriginalText = submitButton.textContent;
-  renderLoading(submitButton, 'Сохранение...');
+  renderLoading(submitButton, 'Сохранение...', true);
 
   api.deleteCard(cardId)
     .then(() => {
@@ -33,7 +33,7 @@ function handleCardDeleteSubmit(cardId, cardToDelete, submitButton) {
         this.close();
     })
     .catch(err => console.log('Card Delete Error: ', err))
-    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText, false));
 }
 
 // Объявляем функцию открытия попапа удаления карточки:
@@ -72,7 +72,7 @@ function handleImageClick(name, link) {
 // Объявляем коллбек сабмита формы добавления карточки:
 function handlePlaceSubmit(cardData, submitButton) {
   const submitButtonOriginalText = submitButton.textContent;
-  renderLoading(submitButton, 'Сохранение...');
+  renderLoading(submitButton, 'Сохранение...', true);
 
   api.addNewCard(cardData)
     .then(newCardData => {
@@ -80,13 +80,13 @@ function handlePlaceSubmit(cardData, submitButton) {
       this.close();
     })
     .catch(err => console.log('Add New Card Error: ', err))
-    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText, false));
 }
 
 // Объявляем коллбек сабмита формы редактирования профиля:
 function handleProfileSubmit(data, submitButton) {
   const submitButtonOriginalText = submitButton.textContent;
-  renderLoading(submitButton, 'Сохранение...');
+  renderLoading(submitButton, 'Сохранение...', true);
 
   api.editUserData(data)
     .then(userData => {
@@ -94,13 +94,13 @@ function handleProfileSubmit(data, submitButton) {
       this.close();
     })
     .catch(err => console.log('Change User Data Error: ', err))
-    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText, false));
 }
 
 // Объявляем функцию сабмита формы изменения аватара:
 function handleAvatarSubmit({avatar}, submitButton) {
   const submitButtonOriginalText = submitButton.textContent;
-  renderLoading(submitButton, 'Сохранение...');
+  renderLoading(submitButton, 'Сохранение...', true);
 
   api.editUserAvatar(avatar)
     .then(res => {
@@ -108,7 +108,7 @@ function handleAvatarSubmit({avatar}, submitButton) {
         this.close();
       })
     .catch(err => console.log('Edit User Avatar Error: ', err))
-    .finally(() => renderLoading(submitButton, submitButtonOriginalText));
+    .finally(() => renderLoading(submitButton, submitButtonOriginalText, false));
 }
 
 // Создаем экземпляры класса PopupWithForm:
