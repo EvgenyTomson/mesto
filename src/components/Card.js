@@ -58,7 +58,7 @@ export class Card {
   }
 
   _deleteCard() {
-    this._handleCardDeleteConfirm(this._id, this._card);
+    this._handleCardDeleteConfirm(this._id, this);
   }
 
   _likeCard() {
@@ -69,6 +69,11 @@ export class Card {
 
   updateLikesCount(likesCount) {
     this._likesCounter.textContent = likesCount;
+  }
+
+  eraseCard() {
+    this._card.remove();
+    this._card = null;
   }
 }
 

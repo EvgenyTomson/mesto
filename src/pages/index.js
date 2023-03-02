@@ -29,7 +29,7 @@ function handleCardDeleteSubmit(cardId, cardToDelete, submitButton) {
 
   api.deleteCard(cardId)
     .then(() => {
-        cardToDelete.remove()
+        cardToDelete.eraseCard();
         this.close();
     })
     .catch(err => console.log('Card Delete Error: ', err))
@@ -180,8 +180,7 @@ const cardsSection = new Section(renderer, containerSelector);
 // Получаем начальные карточки с сервера только после того, как получены данные пользователя:
 Promise.all([api.getUserData(), api.getInitialCards()])
   .then(responses => {
-    const userData = responses[0];
-    const initialCardsData = responses[1];
+    const [userData, initialCardsData] = responses;
 
     currentUser.setUserInfo(userData);
     profileAvatar.src = userData.avatar;

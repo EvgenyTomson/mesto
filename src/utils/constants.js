@@ -10,7 +10,7 @@ export const validationParametres = {
 export const apiOptions = {
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-60',
   headers: {
-    authorization: 'l4bcclcd-5619-4964-8068-6c46ced8ee82',
+    authorization: '14bcc1cd-5619-4964-8098-6c46ced3ee82',
     'Content-Type': 'application/json'
   }
 };
